@@ -2,6 +2,7 @@
 include '../db_conn/operations.php';
 $db = new operations();
 $students=$db->students();
+$dept_r=$db->dept_view();
 
 include 'activity_check.php' ?>
     <div class="d-flex body w-100">
@@ -27,6 +28,18 @@ include 'activity_check.php' ?>
                     <!-- View Appointments -->
                     <div class="card-body h-100">
                         <div class="table-responsive">
+                            <div class="d-flex justify-content-between mb-3">
+                                <select id="dept-select" class="form-select w-25" aria-label="Default select example">
+                                    <option value="" selected>Select Department</option>
+                                    <?php while($dept = mysqli_fetch_assoc($dept_r)) if($dept['id'] != 12){?>
+                                        <option value="<?php echo $dept['dept']  ?>"><?php echo $dept['dept'] ?></option>
+                                    <?php } ?>
+                                </select>
+                                <div class="input-group w-25">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="search-input">
+                                </div>
+                            </div>
                             <table id="myTable" class="display">
                                 <thead>
                                 <tr>
@@ -36,17 +49,17 @@ include 'activity_check.php' ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($students as $student){?>
+                                <?php foreach ($students as $student) { ?>
                                     <tr>
                                         <td><?php echo $student['dept'] ?></td>
                                         <td><?php echo $student['user_name'] ?></td>
                                         <td class="text-end">
-                                            <button type="button" class="btn btn-light me-2" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#dept_course<?php echo $student['username'] ?>">
+                                            <button type="button" class="btn btn-light me-2" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#dept_course<?php echo $student['student_id'] ?>">
                                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                    <div class="modal fade" id="dept_course<?php echo $student['username'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="dept_course<?php echo $student['student_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -61,7 +74,7 @@ include 'activity_check.php' ?>
                                                         </div>
                                                         <div class="row py-1 border-bottom">
                                                             <div class="col-4 py-2">Student ID</div>
-                                                            <div class="col-8 py-2 bg-light"><?php  echo $student['username']; ?></div>
+                                                            <div class="col-8 py-2 bg-light"><?php  echo $student['student_id']; ?></div>
                                                         </div>
                                                         <div class="row py-1 border-bottom">
                                                             <div class="col-4 py-2">Full name:</div>

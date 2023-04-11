@@ -11,7 +11,7 @@ if (isset($_POST['register'])){
         exit();
     }
     if (isset($_POST['student_id']) == ''){
-        header("Location: add_student.php?error=Enter username");
+        header("Location: add_student.php?error=Enter student id");
         exit();
     }
     if (isset($_POST['user_name']) == ''){
@@ -31,7 +31,7 @@ if (isset($_POST['register'])){
             header("Location: admins.php?error = Username exists, please choose another");
             exit();
         } else {
-            if ($stmt = $conn->prepare('INSERT INTO student (dept_id, username, user_name, password) VALUES (?, ?, ?, ?)')) {
+            if ($stmt = $conn->prepare('INSERT INTO student (dept_id, student_id, user_name, password) VALUES (?, ?, ?, ?)')) {
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $stmt->bind_param('ssss', $_POST['dept'], $_POST['student_id'], $_POST['user_name'], $password);
                 $stmt->execute();
@@ -65,14 +65,14 @@ $conn->close();?>
                     <?php } ?>
                     <div class="form-floating mb-3">
                         <select class="form-select" id="floatingSelect" name="dept" aria-label="Floating label select example">
-                            <?php while($dept = mysqli_fetch_assoc($dept_r)){?>
+                            <?php while($dept = mysqli_fetch_assoc($dept_r))if($dept['id'] != 12){?>
                                 <option value="<?php echo $dept['id'] ?>"><?php echo $dept['dept'] ?></option>
                             <?php } ?>
                         </select>
                         <label for="floatingSelect">Select Department</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="floatingInput" name="st_id" placeholder="student ID no." oninput="formatStudentId(this)" pattern="[0-9]{4}-[0-9]{5}" maxlength="10">
+                        <input type="text" class="form-control" id="floatingInput" name="student_id" placeholder="student ID no." oninput="formatStudentId(this)" pattern="[0-9]{4}-[0-9]{5}" maxlength="10">
                         <label for="floatingInput"><i class="fa-solid fa-user me-3"></i>Student ID no.</label>
                     </div>
                     <div class="form-floating mb-3">
