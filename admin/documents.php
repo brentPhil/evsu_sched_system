@@ -1,10 +1,13 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
-$certificate=$db->certificates();
+include '../db_conn/view.php';
+include '../db_conn/insert.php';
+
+$insert = new insert();
+$view = new view();
+$certificate=$view->view_all_documents();
 
 if (isset($_POST['new_cert'])){
-    $db->new_cert($_POST['title'], $_POST['desc']);
+    $insert->new_cert($_POST['title'], $_POST['desc']);
     header("Location: certifications.php");
     exit();
 }
