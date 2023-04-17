@@ -1,18 +1,11 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "", "sched_system");
-include '../db_conn/operations.php';
-$db = new operations();
-
-if(isset($_POST['cancel'])){
-    $id = $_POST['rq_id'];
-    $db->del_rq($id) ? header("Location: st_main.php?success") : header("Location: st_main.php?failed");
-    exit();
-}
+include '../db_conn/view.php';
+$view = new view();
 
 include 'linkScript.php';
 $uid = $_SESSION['id'];
-$dept_id = $_SESSION['dept_id'];
-$rq_rows = $db->view_st_rq($uid, $dept_id);
+$requests = $view->st_request_view($uid);
 ?>
     <style>
         tr td, th{
@@ -40,6 +33,7 @@ $rq_rows = $db->view_st_rq($uid, $dept_id);
             max-width: 120px;
         }
     </style>
+<?php include '../toast.php' ?>
     <div class="d-flex body">
         <div id="side_bar" class="sideNav flex-column flex-shrink-0 bg-light text-dark open">
             <?php include 'includes/st_sideBar.php' ?>
@@ -64,10 +58,11 @@ $rq_rows = $db->view_st_rq($uid, $dept_id);
                     <!-- View Appointments -->
                     <div class="card-body">
                         <div class="table-responsive py-2 text-capitalize">
-                            <table id="myTable">
+                            <table id="myTable" class="display">
                                 <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>#</th>
+                                    <th>Request Type</th>
                                     <th>Full Name</th>
                                     <th>Schedule</th>
                                     <th>Status</th>
@@ -76,16 +71,23 @@ $rq_rows = $db->view_st_rq($uid, $dept_id);
                                 </thead>
                                 <tbody>
                                 <?php
-                                foreach($rq_rows as $row){?>
+                                $counter = 1;
+                                $status_map = [Null => 'pending...',0 => 'in progress',1 => 'for release'];
+                                foreach($requests as $request){
+                                    $status = $status_map[$request['RequestStatus']] ?? 'pending...';
+                                    ?>
                                     <tr>
-                                        <td><?php  echo $row['app_type']; ?></td>
-                                        <td><?php  echo $row['lname'].', '.$row['fname'].' '.$row['middle'].'.'; ?></td>
-                                        <td><?php  echo date('F d, Y | h: i a', strtotime($row['rq_schedule'])); ?></td>
+                                        <td><?php echo $counter; ?></td>
+                                        <td><?php  echo $request['RequestType']; ?></td>
+                                        <td><?php  echo $request['StudentFullName']; ?></td>
+                                        <td><?php  echo date('F d, Y | h: i a', strtotime($request['Schedule'])); ?></td>
                                         <td>
-                                            <div class="td fw-bold text-<?php echo $color = $row['request_status'] != 'pending' ? 'success' : 'primary';?>"><?php echo $row['request_status']?></div>
+                                            <div class="fw-bold text-<?= $request['RequestStatus'] === Null ? 'secondary' : ($request['RequestStatus'] ? 'warning' : 'primary') ?>">
+                                                <?= $status ?>
+                                            </div>
                                         </td>
                                         <td class="text-end">
-                                            <button type="button" class="btn btn-outline-success" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#modal<?php  echo $row['rq_id']; ?>">
+                                            <button type="button" class="btn btn-outline-success" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#modal<?php  echo $request['RequestID']; ?>">
                                                 <i class="fa fa-info-circle" aria-hidden="true"></i> View details
                                             </button>
                                             <div class="btn-group dropstart">
@@ -93,20 +95,21 @@ $rq_rows = $db->view_st_rq($uid, $dept_id);
                                                     <i class="fa-solid fa-ellipsis"></i>
                                                 </a>
                                                 <div class="dropdown-menu p-2">
-                                                    <form action="" class="mb-2" method="post">
-                                                        <input type="hidden" name="rq_id" value="<?php echo $row['rq_id'];?>">
-                                                        <button type="submit" class="btn btn-danger mb-0 w-100" name="cancel">Cancel</button>
+                                                    <form class="mb-2" action="RequestHandler/archiveRequest.php" method="POST">
+                                                        <input type="hidden" name="request_id" value="<?php echo $request['RequestID']; ?>">
+                                                        <button type="submit" name="archiveRequest" class="btn btn-danger w-100">Cancel</button>
                                                     </form>
                                                     <form action="select_sched.php" class="mb-2" method="post">
-                                                        <input type="hidden" name="rq_id" value="<?php echo $row['rq_id'];?>">
-                                                        <button type="submit"<?php echo $row['request_status'] == 'pending...' ? '' : 'disabled';?> name="edit" class="btn btn-danger w-100">Edit</button>
+                                                        <input type="hidden" name="rq_id" value="<?php echo $request['RequestID'];?>">
+                                                        <button type="submit"<?php echo $request['RequestStatus'] == 'pending...' ? '' : 'disabled';?> name="edit" class="btn btn-danger w-100">Edit</button>
                                                     </form>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <?php include 'modal.php'?>
-                                <?php } ?>
+                                    <?php include 'modal.php';
+                                    $counter++;
+                                } ?>
                                 </tbody>
                             </table>
                         </div>

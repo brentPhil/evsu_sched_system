@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 05, 2023 at 06:52 AM
+-- Generation Time: Apr 17, 2023 at 01:07 PM
 -- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -47,31 +47,36 @@ INSERT INTO `admin` (`id`, `dept_id`, `username`, `email`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `archive`
+-- Table structure for table `authorizedpersonnel`
 --
 
-CREATE TABLE `archive` (
-  `rq_id` int(25) NOT NULL,
-  `st_uid` int(25) NOT NULL,
-  `rq_cert` int(11) NOT NULL,
-  `dept_id` int(25) DEFAULT NULL,
-  `course_id` int(25) NOT NULL,
-  `app_type` varchar(255) NOT NULL,
-  `full_name` varchar(255) NOT NULL,
-  `a_gender` varchar(255) NOT NULL,
-  `a_phone` varchar(255) NOT NULL,
-  `edu_status` varchar(255) NOT NULL,
-  `rq_schedule` varchar(255) NOT NULL,
-  `request_status` varchar(255) NOT NULL
+CREATE TABLE `authorizedpersonnel` (
+  `AuthorizedPersonnelID` int(11) NOT NULL,
+  `AuthorizedPersonnelName` varchar(255) DEFAULT NULL,
+  `AuthorizedAddress` varchar(255) DEFAULT NULL,
+  `AuthorizedPerson_IDPic` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `archive`
+-- Dumping data for table `authorizedpersonnel`
 --
 
-INSERT INTO `archive` (`rq_id`, `st_uid`, `rq_cert`, `dept_id`, `course_id`, `app_type`, `full_name`, `a_gender`, `a_phone`, `edu_status`, `rq_schedule`, `request_status`) VALUES
-(77, 4, 1008, 2, 9, 'authorize', 'brent philip l ortega', 'Male', '2147483647', 'Graduate', '2022-12-23T20:11', 'Released'),
-(79, 4, 3818, 2, 9, 'personal', '', '', '0', 'Graduate', '2022-12-22T19:16', 'Released');
+INSERT INTO `authorizedpersonnel` (`AuthorizedPersonnelID`, `AuthorizedPersonnelName`, `AuthorizedAddress`, `AuthorizedPerson_IDPic`) VALUES
+(7, 'merns luora', 'brgy san roque tanauan leyte', 'uploads/325439610_1166478680925644_337658592216281962_n.jpg'),
+(8, 'Brent Philip Ortega', 'brgy san roque tanauan leyte', 'uploads/IMG_20230304_185937_530.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `authorizedpersonnel_archive`
+--
+
+CREATE TABLE `authorizedpersonnel_archive` (
+  `AuthorizedPersonnelID` int(11) NOT NULL,
+  `AuthorizedPersonnelName` varchar(255) DEFAULT NULL,
+  `AuthorizedAddress` varchar(255) DEFAULT NULL,
+  `AuthorizedPerson_IDPic` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -85,32 +90,15 @@ CREATE TABLE `calendar` (
   `event_type` varchar(255) NOT NULL,
   `event_date` date NOT NULL,
   `event_length` int(25) NOT NULL,
-  `event_category` int(25) NOT NULL,
-  `dept_id` int(25) NOT NULL
+  `event_category` int(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `calendar`
 --
 
-INSERT INTO `calendar` (`id`, `app_uid`, `event_type`, `event_date`, `event_length`, `event_category`, `dept_id`) VALUES
-(109, 3, 'holiday', '2022-12-15', 1, 1, 1),
-(110, 3, 'christmas', '2022-12-25', 1, 3, 1),
-(149, 3, 'cod', '0000-00-00', 1, 2, 1),
-(151, 3, 'holiday', '2022-12-28', 2, 2, 1),
-(153, 78, 'request', '2022-12-22', 1, 4, 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `certifications`
---
-
-CREATE TABLE `certifications` (
-  `id` int(25) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `calendar` (`id`, `app_uid`, `event_type`, `event_date`, `event_length`, `event_category`) VALUES
+(181, 19, 'request', '2023-04-27', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -166,30 +154,137 @@ INSERT INTO `deppartment` (`id`, `dept`, `description`) VALUES
 (13, 'Education', ''),
 (14, 'Business and Entrepreneurship', ''),
 (15, 'Arts and Sciences', ''),
-(16, 'Architecture and Allied Discipline', '');
+(16, 'Architecture and Allied Discipline', ''),
+(17, 'Education', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `request_options`
+-- Table structure for table `documentmapping`
 --
 
-CREATE TABLE `request_options` (
-  `id` int(25) NOT NULL,
-  `rq_id` int(25) NOT NULL,
-  `cert_id` int(25) NOT NULL
+CREATE TABLE `documentmapping` (
+  `id` int(11) NOT NULL,
+  `RequestID` int(11) DEFAULT NULL,
+  `DocumentID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `request_options`
+-- Dumping data for table `documentmapping`
 --
 
-INSERT INTO `request_options` (`id`, `rq_id`, `cert_id`) VALUES
-(124, 52, 1),
-(128, 8850, 1),
-(129, 8850, 8),
-(130, 6457, 1),
-(131, 6457, 8);
+INSERT INTO `documentmapping` (`id`, `RequestID`, `DocumentID`) VALUES
+(58, 19, 1),
+(59, 19, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documentmapping_archive`
+--
+
+CREATE TABLE `documentmapping_archive` (
+  `id` int(11) NOT NULL,
+  `RequestID` int(11) DEFAULT NULL,
+  `DocumentID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `documentmapping_archive`
+--
+
+INSERT INTO `documentmapping_archive` (`id`, `RequestID`, `DocumentID`) VALUES
+(56, 18, 1),
+(57, 18, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documents`
+--
+
+CREATE TABLE `documents` (
+  `DocumentID` int(11) NOT NULL,
+  `DocumentName` varchar(255) DEFAULT NULL,
+  `DocumentDescription` text DEFAULT NULL,
+  `DocumentImage` varchar(255) DEFAULT 'default.jpg'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `documents`
+--
+
+INSERT INTO `documents` (`DocumentID`, `DocumentName`, `DocumentDescription`, `DocumentImage`) VALUES
+(1, 'Transcript', 'Official record of student’s academic history.', 'default.jpg'),
+(2, 'Diploma', 'Official document certifying that student has completed degree requirements.', 'default.jpg'),
+(3, 'Enrollment Verification', 'Official proof of student’s enrollment status.', 'default.jpg'),
+(4, 'Degree Verification', 'Official proof of student’s degree completion.', 'default.jpg'),
+(5, 'Grade Report', 'Official record of student’s grades in a particular term.', 'default.jpg'),
+(6, 'Course Description', 'Official description of a course offered by the institution.', 'default.jpg'),
+(8, 'Financial Aid Verification', 'Official proof of student’s financial aid status.', 'default.jpg'),
+(9, 'Student ID Card', 'Official identification card for the student.', 'default.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request`
+--
+
+CREATE TABLE `request` (
+  `RequestID` int(11) NOT NULL,
+  `RequestType` varchar(50) DEFAULT NULL,
+  `StudentID` int(11) DEFAULT NULL,
+  `StudentFullName` varchar(255) DEFAULT NULL,
+  `StudentEmail` varchar(255) DEFAULT NULL,
+  `StudentAddress` varchar(255) DEFAULT NULL,
+  `StudentGender` varchar(50) DEFAULT NULL,
+  `StudentPhone` varchar(20) DEFAULT NULL,
+  `Department` varchar(255) DEFAULT NULL,
+  `Course` varchar(255) DEFAULT NULL,
+  `Education` varchar(255) DEFAULT NULL,
+  `Schedule` varchar(255) DEFAULT NULL,
+  `AuthorizedPersonnelID` int(11) DEFAULT NULL,
+  `CreatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `RequestStatus` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `request`
+--
+
+INSERT INTO `request` (`RequestID`, `RequestType`, `StudentID`, `StudentFullName`, `StudentEmail`, `StudentAddress`, `StudentGender`, `StudentPhone`, `Department`, `Course`, `Education`, `Schedule`, `AuthorizedPersonnelID`, `CreatedAt`, `RequestStatus`) VALUES
+(19, 'authorized', 11, 'denzy, joebe M.', 'jackalatern@gmail.com', 'brgy san roque tanauan leyte', 'male', '2147483647', 'Technology', 'Bachelor of Science in Industrial Technology with major in: Civil Construction', 'undergraduate', '2023-04-27', 8, '2023-04-17 00:09:52', '0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_archive`
+--
+
+CREATE TABLE `request_archive` (
+  `RequestID` int(11) NOT NULL,
+  `RequestType` varchar(50) DEFAULT NULL,
+  `StudentID` int(11) DEFAULT NULL,
+  `StudentFullName` varchar(255) DEFAULT NULL,
+  `StudentEmail` varchar(255) DEFAULT NULL,
+  `StudentAddress` varchar(255) DEFAULT NULL,
+  `StudentGender` varchar(50) DEFAULT NULL,
+  `StudentPhone` varchar(20) DEFAULT NULL,
+  `Department` varchar(255) DEFAULT NULL,
+  `Course` varchar(255) DEFAULT NULL,
+  `Education` varchar(255) DEFAULT NULL,
+  `Schedule` varchar(255) DEFAULT NULL,
+  `AuthorizedPersonnelID` int(11) DEFAULT NULL,
+  `CreatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `RequestStatus` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `request_archive`
+--
+
+INSERT INTO `request_archive` (`RequestID`, `RequestType`, `StudentID`, `StudentFullName`, `StudentEmail`, `StudentAddress`, `StudentGender`, `StudentPhone`, `Department`, `Course`, `Education`, `Schedule`, `AuthorizedPersonnelID`, `CreatedAt`, `RequestStatus`) VALUES
+(18, 'personal', 11, 'denzy, joebe M.', 'jackalatern@gmail.com', 'brgy san roque tanauan leyte', 'male', '2147483647', 'Technology', '', '', '2023-04-27', NULL, '2023-04-17 00:03:25', 'canceled');
 
 -- --------------------------------------------------------
 
@@ -200,8 +295,7 @@ INSERT INTO `request_options` (`id`, `rq_id`, `cert_id`) VALUES
 CREATE TABLE `student` (
   `st_id` int(25) NOT NULL,
   `dept_id` int(25) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `student_id` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `user_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -210,11 +304,8 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`st_id`, `dept_id`, `username`, `email`, `password`, `user_name`) VALUES
-(3, 1, '2019-35780', 'markel@gmail.com', '$2y$10$LvLdtmdE2l5I4KzhisaIV.o5vy19hpEyvAPe7m1tI3vmbpmYbSxEW', 'markel'),
-(4, 2, '2019-87544', 'zackYChan@gmail.com', '$2y$10$lkdDf8dPND.gOblpr3R8EOa85lNcshqJQNK04Z1KKZj.zSOS/kf0y', 'zackChan'),
-(5, 15, '2019-53894', 'brentagetrophil@gmail.com', '$2y$10$OubpJOkdch4JX2fG245.A.tlMe0LNMD5YYozb30Qb5t77D.g31796', 'brenyy'),
-(6, 2, '1990-65478', 'brentagetrophil@gmail.com', '$2y$10$MK29bVSLb2sHu0p3yXI1p.55DJAvIet4p/K8tfGNv5ebr6CQKNNBm', 'brent bayot');
+INSERT INTO `student` (`st_id`, `dept_id`, `student_id`, `password`, `user_name`) VALUES
+(11, 2, '2019-35780', '$2y$10$xcez3GkoWJGFcfMTbc4Dbe4Je4JUpK6lM1Xho/U.eM4.T9EV68YtW', 'jackFrozen');
 
 -- --------------------------------------------------------
 
@@ -241,36 +332,10 @@ CREATE TABLE `st_profile` (
 
 INSERT INTO `st_profile` (`id`, `st_uid`, `course_id`, `lname`, `fname`, `middle`, `gender`, `address`, `email`, `phone`) VALUES
 (12, 3, 1, 'robert', 'hanze', 's', 'male', 'brgy san roque tanauan leyte', 'hanzeSolo@gmail.com', 2147483647),
-(13, 4, 9, 'jackerberg', 'mark', 'l.', 'male', 'brgy san roque tanauan leyte', 'brentagetrophil@gmail.com', 2147483647);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `st_request`
---
-
-CREATE TABLE `st_request` (
-  `rq_id` int(25) NOT NULL,
-  `st_uid` int(25) NOT NULL,
-  `rq_cert` int(11) NOT NULL,
-  `dept_id` int(25) DEFAULT NULL,
-  `course_id` int(25) NOT NULL,
-  `app_type` varchar(255) NOT NULL,
-  `full_name` varchar(255) NOT NULL,
-  `a_gender` varchar(255) NOT NULL,
-  `a_phone` int(12) NOT NULL,
-  `edu_status` varchar(255) NOT NULL,
-  `rq_schedule` varchar(255) NOT NULL,
-  `request_status` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `st_request`
---
-
-INSERT INTO `st_request` (`rq_id`, `st_uid`, `rq_cert`, `dept_id`, `course_id`, `app_type`, `full_name`, `a_gender`, `a_phone`, `edu_status`, `rq_schedule`, `request_status`) VALUES
-(78, 4, 775, 2, 10, 'personal', '', '', 0, '2nd year', '2022-12-22T21:23', 'on process...'),
-(80, 4, 9479, 2, 9, 'personal', '', '', 0, 'Graduate', '2022-12-24T23:16', 'pending...');
+(13, 4, 9, 'jackerberg', 'mark', 'l.', 'male', 'brgy san roque tanauan leyte', 'brentagetrophil@gmail.com', 2147483647),
+(14, 7, 8, 'frozen2', 'jack', 'M', 'male', 'brgy san roque tanauan leyte', 'jackalatern@gmail.com', 2147483647),
+(15, 9, 0, 'brent.agetro@gmail.com', 'Brent Philip Jr. Front End Developer Ortega', 'Brent Philip Jr. Front End Developer Ortega', 'male', 'brgy san roque tanauan leyte', 'brent.agetro@gmail.com', 2147483647),
+(16, 11, 13, 'denzy', 'joebe', 'M', 'male', 'brgy san roque tanauan leyte', 'jackalatern@gmail.com', 2147483647);
 
 --
 -- Indexes for dumped tables
@@ -283,21 +348,21 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `archive`
+-- Indexes for table `authorizedpersonnel`
 --
-ALTER TABLE `archive`
-  ADD PRIMARY KEY (`rq_id`);
+ALTER TABLE `authorizedpersonnel`
+  ADD PRIMARY KEY (`AuthorizedPersonnelID`);
+
+--
+-- Indexes for table `authorizedpersonnel_archive`
+--
+ALTER TABLE `authorizedpersonnel_archive`
+  ADD PRIMARY KEY (`AuthorizedPersonnelID`);
 
 --
 -- Indexes for table `calendar`
 --
 ALTER TABLE `calendar`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `certifications`
---
-ALTER TABLE `certifications`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -313,10 +378,42 @@ ALTER TABLE `deppartment`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `request_options`
+-- Indexes for table `documentmapping`
 --
-ALTER TABLE `request_options`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `documentmapping`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `DocumentID` (`DocumentID`),
+  ADD KEY `documentmapping_ibfk_1` (`RequestID`);
+
+--
+-- Indexes for table `documentmapping_archive`
+--
+ALTER TABLE `documentmapping_archive`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `DocumentID` (`DocumentID`),
+  ADD KEY `documentmapping_ibfk_1` (`RequestID`);
+
+--
+-- Indexes for table `documents`
+--
+ALTER TABLE `documents`
+  ADD PRIMARY KEY (`DocumentID`);
+
+--
+-- Indexes for table `request`
+--
+ALTER TABLE `request`
+  ADD PRIMARY KEY (`RequestID`),
+  ADD KEY `AuthorizedPersonnelID` (`AuthorizedPersonnelID`),
+  ADD KEY `StudentID` (`StudentID`);
+
+--
+-- Indexes for table `request_archive`
+--
+ALTER TABLE `request_archive`
+  ADD PRIMARY KEY (`RequestID`),
+  ADD KEY `AuthorizedPersonnelID` (`AuthorizedPersonnelID`),
+  ADD KEY `StudentID` (`StudentID`);
 
 --
 -- Indexes for table `student`
@@ -331,12 +428,6 @@ ALTER TABLE `st_profile`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `st_request`
---
-ALTER TABLE `st_request`
-  ADD PRIMARY KEY (`rq_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -347,22 +438,22 @@ ALTER TABLE `admin`
   MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `archive`
+-- AUTO_INCREMENT for table `authorizedpersonnel`
 --
-ALTER TABLE `archive`
-  MODIFY `rq_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+ALTER TABLE `authorizedpersonnel`
+  MODIFY `AuthorizedPersonnelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `authorizedpersonnel_archive`
+--
+ALTER TABLE `authorizedpersonnel_archive`
+  MODIFY `AuthorizedPersonnelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `calendar`
 --
 ALTER TABLE `calendar`
-  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
-
---
--- AUTO_INCREMENT for table `certifications`
---
-ALTER TABLE `certifications`
-  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -374,31 +465,60 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT for table `deppartment`
 --
 ALTER TABLE `deppartment`
-  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `request_options`
+-- AUTO_INCREMENT for table `documentmapping`
 --
-ALTER TABLE `request_options`
-  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
+ALTER TABLE `documentmapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+
+--
+-- AUTO_INCREMENT for table `documentmapping_archive`
+--
+ALTER TABLE `documentmapping_archive`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT for table `request`
+--
+ALTER TABLE `request`
+  MODIFY `RequestID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `request_archive`
+--
+ALTER TABLE `request_archive`
+  MODIFY `RequestID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `st_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `st_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `st_profile`
 --
 ALTER TABLE `st_profile`
-  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `st_request`
+-- Constraints for dumped tables
 --
-ALTER TABLE `st_request`
-  MODIFY `rq_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+
+--
+-- Constraints for table `documentmapping`
+--
+ALTER TABLE `documentmapping`
+  ADD CONSTRAINT `documentmapping_ibfk_1` FOREIGN KEY (`RequestID`) REFERENCES `request` (`RequestID`),
+  ADD CONSTRAINT `documentmapping_ibfk_2` FOREIGN KEY (`DocumentID`) REFERENCES `documents` (`DocumentID`);
+
+--
+-- Constraints for table `request`
+--
+ALTER TABLE `request`
+  ADD CONSTRAINT `request_ibfk_2` FOREIGN KEY (`StudentID`) REFERENCES `student` (`st_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

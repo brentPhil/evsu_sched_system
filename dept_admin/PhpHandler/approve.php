@@ -1,7 +1,7 @@
 <?php
 session_start();
-include '../../db_conn/operations.php';
-$db = new operations();
+include '../../db_conn/view.php';
+$db = new view();
 
 
 if(isset($_POST['prog'])){
@@ -11,7 +11,7 @@ if(isset($_POST['prog'])){
     $rq_date = $_POST['sched'];
     if ($rq_date != null){
         if($db->conform_rq($uid, $dept_id, $rq_date)){
-            $db->conform_update($uid, $status) ? header("Location: ../ad_main.php?success") : header("Location: ../ad_main.php?up_failed");
+            $db->conform_update($uid, $status) ? header("Location: ../dashboard?success") : header("Location: ../ad_main.php?up_failed");
         }else{
             header("Location: ../ad_main.php?failed");
         }

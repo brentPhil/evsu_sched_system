@@ -1,8 +1,8 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
-$departments=$db->dept_view();
-$courses=$db->course_view();
+include '../db_conn/view.php';
+$view = new view();
+$departments=$view->dept_view();
+$courses=$view->course_view();
 
 include 'activity_check.php' ?>
     <div class="d-flex body w-100">
@@ -19,8 +19,8 @@ include 'activity_check.php' ?>
                                 <h6 class="m-0 font-weight-bold text-secondary">
                                     Department
                                 </h6>
-                                <button type="button" class="btn btn-outline-primary" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#add_dept">
-                                    Add Department
+                                <button type="button" class="btn btn-outline-dark" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#add_dept">
+                                    <i class="fa fa-plus-circle me-1"></i> New Department
                                 </button>
                                 <?php include 'includes/dept_course_modal.php'?>
                             </div>
@@ -37,7 +37,7 @@ include 'activity_check.php' ?>
                                         <tbody>
                                         <?php foreach ($departments as $dept){ if ($dept['dept'] != ''){?>
                                             <tr>
-                                                <td><div class="overflow-ellipsis" style="max-width: 100px;"><?php echo $dept['dept'] ?></div></td>
+                                                <td><div class="overflow-ellipsis" style="max-width: 250px;"><?php echo $dept['dept'] ?></div></td>
                                                 <td class="text-end">
                                                     <button type="button" class="btn btn-light" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#dept<?php echo $dept['id'] ?>">
                                                         <i class="fa-solid fa-circle-info"></i>
@@ -45,7 +45,7 @@ include 'activity_check.php' ?>
                                                 </td>
                                             </tr>
                                             <div class="modal fade" id="dept<?php echo $dept['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                <div class="modal-dialog modal-dialog-centered border-3">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Department</h1>
@@ -63,9 +63,6 @@ include 'activity_check.php' ?>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="modal-footer">
-
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -82,8 +79,8 @@ include 'activity_check.php' ?>
                                 <h6 class="m-0 font-weight-bold text-secondary">
                                     Courses
                                 </h6>
-                                <button type="button" class="btn btn-outline-primary" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#add_course">
-                                    Add Course
+                                <button type="button" class="btn btn-outline-dark" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#add_course">
+                                    <i class="fa fa-plus-circle me-1"></i> New Course
                                 </button>
                             </div>
                             <!-- View Appointments -->
@@ -107,7 +104,7 @@ include 'activity_check.php' ?>
                                                 </td>
                                             </tr>
                                             <div class="modal fade" id="course<?php echo $course['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                <div class="modal-dialog modal-dialog-centered border-3">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Course</h1>

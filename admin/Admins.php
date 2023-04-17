@@ -1,7 +1,7 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
-$admins_r=$db->admins();
+include '../db_conn/view.php';
+$view = new view();
+$admins_r=$view->admins();
 
 include 'activity_check.php' ?>
     <div class="d-flex body w-100">

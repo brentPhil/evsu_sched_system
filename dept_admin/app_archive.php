@@ -1,6 +1,6 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
+include '../db_conn/view.php';
+$db = new view();
 
 include 'admin_libraries.php';
 $archived = $db->dept_archives($_SESSION['dept_id'])?>

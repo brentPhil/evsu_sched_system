@@ -1,6 +1,6 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
+include '../db_conn/view.php';
+$db = new view();
 $students=$db->students();
 $dept_r=$db->dept_view();
 

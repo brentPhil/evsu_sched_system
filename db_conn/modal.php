@@ -1,8 +1,5 @@
-<?php
-$rq_id = $request['rq_cert'];
-$rq_cert = $db->view_rq_cert($rq_id);
-?>
-<div class="modal fade" id="modal<?php  echo $request['rq_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="modal<?php  echo $request['RequestID']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,59 +8,94 @@ $rq_cert = $db->view_rq_cert($rq_id);
             </div>
             <div class="modal-body">
                 <div class="px-2" style="font-size: 1rem; text-transform: capitalize">
-                    <?php if ($request['app_type'] == 'personal'){?>
+                    <?php if ($request['RequestType'] == 'personal'){?>
                         <div class="row py-1 border-bottom">
                             <div class="col-4 py-2">Type:</div>
-                            <div class="col-8 py-2 bg-light"><?php  echo $request['app_type']; ?></div>
+                            <div class="col-8 py-2 bg-light"><?php  echo $request['RequestType']; ?></div>
                         </div>
                     <?php } else {?>
                         <div class="row py-1 border-bottom">
                             <div class="col-4 py-2">Authorized Personnel:</div>
-                            <div class="col-8 py-2 bg-light"><?php  echo 'name: '.$request['full_name'].'<br>gender: '.$request['a_gender'].'<br>phone# '.$request['a_phone']; ?></div>
+                            <div class="col-8 py-2 bg-light"><?php  echo 'name: '.$request['AuthorizedPersonnelName']?></div>
                         </div>
                     <?php } ?>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Full name:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['lname'].', '.$request['fname'].' '.$request['middle'].'.'; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['StudentFullName']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Email:</div>
-                        <div class="col-8 py-2 bg-light text-lowercase"><?php  echo $request['email']; ?></div>
+                        <div class="col-8 py-2 bg-light text-lowercase"><?php  echo $request['StudentEmail']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Address:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['address']; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['StudentAddress']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Gender:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['gender']; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['StudentGender']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Phone:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['phone']; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['StudentPhone']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Department:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['dept']; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['Department']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Course:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['name']; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['Course']; ?></div>
                     </div>
                     <div class="row py-1 border-bottom">
                         <div class="col-4 py-2">Education:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo $request['edu_status']; ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo $request['Education']; ?></div>
                     </div>
 
                     <div class="row py-1 border-bottom">
                         <div class="col-4">Schedule:</div>
-                        <div class="col-8 py-2 bg-light"><?php  echo date('F d, Y | h: i a', strtotime($request['rq_schedule'])); ?></div>
+                        <div class="col-8 py-2 bg-light"><?php  echo date('F d, Y | h: i a', strtotime($request['Schedule'])); ?></div>
                     </div>
-                    <div class="row py-1 ">
-                        <div class="col-4 py-2">Requested documents:</div>
-                        <div class="col-8 py-2 bg-light"><ul><?php foreach($rq_cert as $cert){?><?php  echo '<li>'.$cert['name'].'</li>'; } ?></ul></div>
+                    <div>
+                        <div class="py-2">Requested documents:</div>
+                        <div class="row gx-3 p-2 bg-light">
+                            <?php foreach($documents as $doc): ?>
+                                <div class="col">
+                                    <div class="bg-white doc_card border rounded shadow-sm">
+                                        <div class="docCardIMG">
+                                            <img src="../img/ID_cardDefault.jpg" class="card-img-top" alt="<?= $doc['DocumentName'] ?>">
+                                        </div>
+                                        <div class="px-2 pt-2">
+                                            <h6 class=""><?= $doc['DocumentName'] ?></h6>
+                                            <p style="font-size: 12px"><?= $doc['DocumentDescription'] ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete<?php  echo $request['RequestID']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Request</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this request?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form class="m-0" action="PhpHandler/approve.php" method="POST">
+                    <input type="hidden" name="request_id" value="<?php echo $request['RequestID']; ?>">
+                    <button type="submit" name="deleteRequest" class="btn btn-danger">Archive</button>
+                </form>
             </div>
         </div>
     </div>

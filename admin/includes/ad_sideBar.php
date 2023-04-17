@@ -5,6 +5,25 @@
         background: rgb(2,0,36);
         background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(255,255,255,0) 0%, rgba(255,226,226,0.7987570028011204) 100%);
     }
+    .doc_card:hover .docCardIMG {
+        height: 120px; /* set the desired increased height */
+    }
+
+    .docCardIMG {
+        transition: all 0.3s ease;
+        position: relative;
+        height: 80px; /* set the desired height of the container */
+        overflow: hidden;
+    }
+
+    .docCardIMG img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
 </style>
 <div class="px-3" style="border-radius: 0 0 1em 1em; background: #d54b4b">
     <div style="max-width: 70px; padding: 1.5em 0">
@@ -43,20 +62,12 @@
                     </div>
                     <ul class="dropdown-menu shadow-lg p-0 border-0 bg-light">
                         <li><a class="dropdown-item bg-light text-secondary" href="Admins.php">Employees</a></li>
-                        <li><a class="dropdown-item bg-light text-secondary" href="certifications.php">Certificates</a></li>
+                        <li><a class="dropdown-item bg-light text-secondary" href="documents.php">Documents</a></li>
                         <li><a class="dropdown-item bg-light text-secondary" href="dept_course.php">Department/Courses</a></li>
                         <li><a class="dropdown-item bg-light text-secondary" href="student.php">Student</a></li>
                     </ul>
                 </div>
             </div>
-        </li>
-        <li>
-            <a href="ad_main.php" class="d-flex py-3 links text-decoration-none" >
-                <div class="iContainer mx-3">
-                    <i class="fa-solid fa-list-check"></i>
-                </div>
-                <span class="tlink overflow-hidden">New Requests</span>
-            </a>
         </li>
         <li>
             <a href="appointments.php" class="d-flex py-3 links text-decoration-none">

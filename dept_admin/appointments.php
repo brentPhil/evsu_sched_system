@@ -1,6 +1,6 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
+include '../db_conn/view.php';
+$db = new view();
 
 include 'admin_libraries.php';
 $approved=$db->approved_request($_SESSION['dept_id']);

@@ -32,10 +32,7 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-
         $('#rq, #rq_prog').DataTable({
-            scrollY: '23vh',
-            scrollCollapse: true,
             "bPaginate": false,
             "bLengthChange": false,
             "bFilter": true,
@@ -43,8 +40,6 @@
             "bAutoWidth": true,
         });
         $('#deptTable').DataTable({
-            scrollY: '50vh',
-            scrollCollapse: true,
             "bPaginate": false,
             "bLengthChange": false,
             "bFilter": true,
@@ -52,8 +47,6 @@
             "bAutoWidth": true,
         });
         $('#courseTable').DataTable({
-            scrollY: '50vh',
-            scrollCollapse: true,
             "bPaginate": false,
             "bLengthChange": false,
             "bFilter": true,

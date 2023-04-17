@@ -1,116 +1,56 @@
 <?php
 require_once('dbconfig.php');
-$db = new dbconfig();
-
-class view extends dbconfig
+$delete = new dbconfig();
+class delete extends dbconfig
 {
-    public function dept_view(): mysqli_result|bool
+    public function del_event_cal($d_id): mysqli_result|bool
     {
-        global $db;
-        return mysqli_query($db->conn,"SELECT * FROM deppartment");
+        global $delete;
+        return mysqli_query($delete->conn, "DELETE FROM calendar WHERE id = '$d_id'");
     }
-     public function event_view(): mysqli_result|bool
+    public function deleteDocuments($id): mysqli_result|bool
     {
-        global $db;
-        return mysqli_query($db->conn, "SELECT * FROM calendar WHERE app_uid = 3");
+        global $delete;
+        return mysqli_query($delete->conn, "DELETE FROM Documents WHERE DocumentID = '$id'");
     }
-    public function dept_view_id($id): mysqli_result|bool
+    public function delete_request($requestId): bool
     {
-        global $db;
-        return mysqli_query($db->conn,"SELECT * FROM deppartment WHERE id = '$id'");
-    }
+        global $delete;
+        $delete->conn->autocommit(false); // Start transaction
 
-    public function pro_view($id): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"SELECT * FROM st_profile WHERE st_uid = '$id'");
-    }
-
-    public function course_view(): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"SELECT * FROM courses");
-    }
-    public function all_approved_request(): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn, "SELECT * FROM st_request a INNER JOIN deppartment b ON a.dept_id = b.id INNER JOIN courses c ON a.course_id = c.id LEFT JOIN st_profile d ON d.st_uid = a.st_uid INNER JOIN calendar e ON a.rq_id = e.app_uid");
-    }
-
-    public function admins(): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"SELECT * FROM admin a INNER JOIN deppartment b ON a.dept_id = b.id");
-    }
-    public function students(): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"SELECT * FROM student a INNER JOIN deppartment b ON a.dept_id = b.id");
-    }
-//    Insert Functions
-
-    public function new_event($ad_id,$uid,$e_type,$e_date,$e_length,$e_category): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"INSERT INTO calendar(app_uid, dept_id, event_type, event_date, event_length, event_category) VALUES ('$ad_id','$uid','$e_type','$e_date','$e_length','$e_category')");
-    }
-    public function pro_save($st_uid, $course_id, $lname, $fname, $middle, $gender, $address, $email, $phone): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"INSERT INTO st_profile(st_uid, course_id, lname, fname, middle, gender, address, email, phone) VALUES ('$st_uid', '$course_id', '$lname', '$fname', '$middle', '$gender', '$address', '$email', '$phone')");
-    }
-    public function new_dept($dept, $desc): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"INSERT INTO deppartment( dept, description) VALUES ('$dept','$desc')");
-    }
-    public function new_course($dept_id, $name, $desc): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"INSERT INTO courses( dept_id, name, description) VALUES ('$dept_id','$name','$desc')");
-    }
-    public function conform_rq($uid, $dept_id, $rq_date): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,"INSERT INTO calendar(app_uid, event_type, event_date, event_length, event_category, dept_id) VALUES ('$uid', 'request', '$rq_date', '1', '4', '$dept_id')");
-    }
-
-    public function new_request($st_uid, $rand_id, $dept, $course, $type, $fullname, $gender,  $contact,  $sched_dt,  $status, $rq_status): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn,
-            "INSERT INTO st_request(st_uid, rq_cert, dept_id, course_id, app_type, full_name, a_gender, a_phone, rq_schedule, edu_status, request_status) VALUES 
-                                         ('$st_uid','$rand_id','$dept','$course','$type','$fullname', '$gender', '$contact', '$sched_dt', '$status', '$rq_status')");
-    }
-
-
-//    Update Functions
-    public function update_request($st_uid,$dept,$course,$type,$fullname, $gender, $contact, $status, $sched_dt, $rq_id): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn, "UPDATE st_request SET st_uid='$st_uid',dept_id='$dept',course_id='$course',app_type='$type',full_name='$fullname',a_gender='$gender',a_phone='$contact',edu_status='$status',rq_schedule='$sched_dt' WHERE rq_id = '$rq_id'");
-    }
-    public function conform_update($uid, $status): mysqli_result|bool
-        {
-            global $db;
-            return mysqli_query($db->conn, "UPDATE st_request SET request_status = '$status' WHERE rq_id = '$uid'");
+        // Delete records from documentmapping table
+        $stmt1 = $delete->conn->prepare("DELETE FROM `documentmapping_archive` WHERE `RequestID` = ?");
+        $stmt1->bind_param("i", $requestId);
+        $stmt1->execute();
+        if ($stmt1->errno !== 0) {
+            $stmt1->close();
+            $delete->conn->rollback(); // Rollback transaction
+            return false;
         }
+        $stmt1->close();
 
-//    Delete Functions
+        // Delete records from request table
+        $stmt2 = $delete->conn->prepare("DELETE FROM `request_archive` WHERE `RequestID` = ?");
+        $stmt2->bind_param("i", $requestId);
+        $stmt2->execute();
+        if ($stmt2->errno !== 0) {
+            $stmt2->close();
+            $delete->conn->rollback(); // Rollback transaction
+            return false;
+        }
+        $stmt2->close();
 
-    public function del_event_cal($d_id, $uid): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn, "DELETE FROM calendar WHERE id = '$d_id' AND dept_id = '$uid'");
-    }
-    public function del_rq($id): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn, "DELETE FROM st_request WHERE rq_id = '$id'");
-    }
-    public function del_sched($id): mysqli_result|bool
-    {
-        global $db;
-        return mysqli_query($db->conn, "DELETE FROM calendar WHERE app_uid = '$id'");
+        // Delete records from authorizedpersonnel table
+        $stmt3 = $delete->conn->prepare("DELETE FROM `authorizedpersonnel_archive` WHERE `AuthorizedPersonnelID` NOT IN (SELECT `AuthorizedPersonnelID` FROM `request_archive`)");
+        $stmt3->execute();
+        if ($stmt3->errno !== 0) {
+            $stmt3->close();
+            $delete->conn->rollback(); // Rollback transaction
+            return false;
+        }
+        $stmt3->close();
+
+        $delete->conn->commit(); // Commit transaction
+        return true;
     }
 }

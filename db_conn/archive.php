@@ -1,56 +1,75 @@
 <?php
 require_once('dbconfig.php');
-$delete = new dbconfig();
-class delete extends dbconfig
+
+class Archive extends dbconfig
 {
-    public function del_event_cal($d_id, $uid): mysqli_result|bool
+    public function st_request_archive($request_id): mysqli_result|bool
     {
-        global $delete;
-        return mysqli_query($delete->conn, "DELETE FROM calendar WHERE id = '$d_id' AND dept_id = '$uid'");
+        global $view;
+        return mysqli_query($view->conn, "SELECT * FROM Request_archive r
+LEFT JOIN authorizedpersonnel_archive a
+ON r.AuthorizedPersonnelID = a.AuthorizedPersonnelID
+WHERE r.StudentID = '$request_id'");
     }
-    public function deleteDocuments($id): mysqli_result|bool
+    public function request_archive(): mysqli_result|bool
     {
-        global $delete;
-        return mysqli_query($delete->conn, "DELETE FROM Documents WHERE DocumentID = '$id'");
+        global $view;
+        return mysqli_query($view->conn, "SELECT * FROM Request_archive r
+LEFT JOIN authorizedpersonnel_archive a
+ON r.AuthorizedPersonnelID = a.AuthorizedPersonnelID");
     }
-    public function delete_request($requestId): bool
+    public function archive_Requests($requestID, $status): mysqli_result|bool
     {
-        global $delete;
-        $delete->conn->autocommit(false); // Start transaction
+        try {
+            // Start transaction
+            $this->conn->begin_transaction();
 
-        // Delete records from documentmapping table
-        $stmt1 = $delete->conn->prepare("DELETE FROM `documentmapping` WHERE `RequestID` = ?");
-        $stmt1->bind_param("i", $requestId);
-        $stmt1->execute();
-        if ($stmt1->errno !== 0) {
+            $stmt6 = $this->conn->prepare("UPDATE request SET RequestStatus = ? WHERE RequestID = ?");
+            $stmt6->bind_param("ss", $status, $requestID);
+            $stmt6->execute();
+            $stmt6->close();
+
+            // Archive requests
+            $stmt1 = $this->conn->prepare("INSERT INTO request_archive SELECT * FROM request WHERE RequestID = ?");
+            $stmt1->bind_param("s", $requestID);
+            $stmt1->execute();
             $stmt1->close();
-            $delete->conn->rollback(); // Rollback transaction
-            return false;
-        }
-        $stmt1->close();
 
-        // Delete records from request table
-        $stmt2 = $delete->conn->prepare("DELETE FROM `request` WHERE `RequestID` = ?");
-        $stmt2->bind_param("i", $requestId);
-        $stmt2->execute();
-        if ($stmt2->errno !== 0) {
+            // Archive document mappings
+            $stmt2 = $this->conn->prepare("INSERT INTO documentmapping_archive SELECT * FROM documentmapping WHERE RequestID = ?");
+            $stmt2->bind_param("s", $requestID);
+            $stmt2->execute();
             $stmt2->close();
-            $delete->conn->rollback(); // Rollback transaction
-            return false;
-        }
-        $stmt2->close();
 
-        // Delete records from authorizedpersonnel table
-        $stmt3 = $delete->conn->prepare("DELETE FROM `authorizedpersonnel` WHERE `AuthorizedPersonnelID` NOT IN (SELECT `AuthorizedPersonnelID` FROM `request`)");
-        $stmt3->execute();
-        if ($stmt3->errno !== 0) {
+            // Archive authorized personnel
+            $stmt3 = $this->conn->prepare("INSERT INTO authorizedpersonnel_archive SELECT * FROM authorizedpersonnel WHERE AuthorizedPersonnelID IN (SELECT DISTINCT AuthorizedPersonnelID FROM request_archive)");
+            $stmt3->execute();
             $stmt3->close();
-            $delete->conn->rollback(); // Rollback transaction
+
+            // Clear requests and associated records from original tables
+            $stmt4 = $this->conn->prepare("DELETE FROM documentmapping WHERE RequestID = ?");
+            $stmt4->bind_param("s", $requestID);
+            $stmt4->execute();
+            $stmt4->close();
+
+            $stmt5 = $this->conn->prepare("DELETE FROM request WHERE RequestID = ?");
+            $stmt5->bind_param("s", $requestID);
+            $stmt5->execute();
+            $stmt5->close();
+
+            // Delete authorized personnel associated with archived requests
+            $stmt4 = $this->conn->prepare("DELETE FROM authorizedpersonnel WHERE AuthorizedPersonnelID IN (SELECT DISTINCT AuthorizedPersonnelID FROM request_archive)");
+            $stmt4->execute();
+            $stmt4->close();
+
+            // Commit transaction
+            $this->conn->commit();
+
+            return true;
+        } catch (Exception $e) {
+            error_log("Error archiving request: " . $e->getMessage());
+            $this->conn->rollback();
             return false;
         }
-        $stmt3->close();
-
-        $delete->conn->commit(); // Commit transaction
-        return true;
     }
 }

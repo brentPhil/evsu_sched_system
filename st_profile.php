@@ -1,7 +1,7 @@
 <?php
-include 'db_conn/operations.php';
-$db = new operations();
-$courses=$db->course_view();
+include 'db_conn/view.php';
+$view = new view();
+$courses=$view->course_view();
 session_start()
 ?>
 <?php include '_libraries.php'?>

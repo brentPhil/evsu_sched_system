@@ -1,7 +1,7 @@
 <?php
 include '../../db_conn/config.php';
-include '../../db_conn/operations.php';
-$db = new operations();
+include '../../db_conn/view.php';
+$db = new view();
 session_start();
 
 if ( empty($_POST['st_id'])) {
@@ -13,7 +13,7 @@ elseif ( empty($_POST['password'])){
     exit();
 }
 
-if ($stmt = $conn->prepare('SELECT st_id, user_name, dept_id, password FROM student WHERE username = ?')) {
+if ($stmt = $conn->prepare('SELECT st_id, user_name, dept_id, password FROM student WHERE student_id = ?')) {
     // Bind parameters (s = string, i = int, b = blob, etc), in our case the username is a string so we use "s"
     $stmt->bind_param('s', $_POST['st_id']);
     $stmt->execute();

@@ -1,12 +1,12 @@
 <?php
-include '../db_conn/operations.php';
-$db = new operations();
-
+include '../db_conn/view.php';
+$db = $view = new view();
+$requests = $view->approved_requests();
 include 'activity_check.php';
-$approved=$db->all_approved_request();
+include '../toast.php';
 ?>
     <div class="d-flex body w-100">
-        <div id="side_bar" class="sideNav flex-column flex-shrink-0 bg-light text-dark open">
+        <div id="side_bar" class="sideNav flex-column flex-shrink-1 bg-light text-dark open">
             <?php include 'includes/ad_sideBar.php' ?>
         </div>
         <div class="w-100">
@@ -18,70 +18,89 @@ $approved=$db->all_approved_request();
                         <li class="breadcrumb-item text-secondary" aria-current="page">Requests</li>
                     </ol>
                 </nav>
-                <div class="card border-0 shadow-lg" style="height: 75vh;">
+                <div class="card border-1 shadow-lg" style="height: 75vh;">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-secondary">
-                            Request
+                        <h6 class="m-1 font-weight-bold text-secondary">
+                            Approved Request
                         </h6>
                     </div>
                     <!-- View Appointments -->
                     <div class="card-body">
-                        <div class="table-responsive py-2 text-capitalize">
-                            <table id="myTable">
+                        <div class="table-responsive">
+                            <table id="rq" class="display">
                                 <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>#</th>
                                     <th>Full Name</th>
                                     <th>Schedule</th>
                                     <th>Status</th>
+                                    <th>Requested documents</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-                                foreach($approved as $request){
-                                    $id = $request['rq_id'];?>
+                                $counter = 1;
+                                $status_map = [Null => 'pending...',0 => 'in progress',1 => 'for release'];
+                                $btn_map = [Null => 'Approve',0 => 'Done',1 => 'Released'];
+                                foreach ($requests as $request) {
+                                    $documents=$view->document_mappings($request['RequestID']);
+                                    $status = $status_map[$request['RequestStatus']] ?? 'pending...';
+                                    $btn_txt = $btn_map[$request['RequestStatus']] ?? 'Approve';
+                                    $btn_class = !$request['RequestStatus'] ? 'primary' : 'warning';
+                                    ?>
                                     <tr>
-                                        <td><?php  echo $request['app_type']; ?></td>
-                                        <td><div class="overflow-ellipsis" style="max-width: 120px"><?php  echo $request['lname'].', '.$request['fname'].' '.$request['middle'].'.'; ?></div></td>
-                                        <td><div class="overflow-ellipsis" style="max-width: 120px"><?php  echo date('F d, Y | h: i a', strtotime($request['rq_schedule'])); ?></div></td>
-                                        <td><div class="td fw-bold text-<?php echo $color = $request['request_status'] == 'on progress' ? 'primary' : 'warning';?>"><?php echo $request['request_status']?></div></td>
-                                        <td class="text-end d-flex justify-content-end">
-                                            <button type="button" class="btn btn-light me-2" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#modal<?php  echo $request['rq_id']; ?>">
-                                                <i class="fa fa-info-circle" aria-hidden="true"></i> View details
-                                            </button>
-                                            <?php  if($request['request_status'] == 'for release...'){ ?>
-                                                <form action="PhpHandler/approve.php" class="m-0" method="post">
-                                                    <input type="hidden" name="rq_id" value="<?php echo $request['rq_id'];?>">
-                                                    <input type="hidden" name="up_status" value="Released">
-                                                    <button type="submit" name="released" class="btn btn-outline-warning me-2" style="font-size: .8rem">
-                                                        <i class="fa-regular fa-calendar-check"></i> Released
-                                                    </button>
-                                                 </form>
-                                            <?php }else{ ?>
-                                                <form action="PhpHandler/approve.php" class="m-0" method="post">
-                                                    <input type="hidden" name="id" value="<?php  echo $request['rq_id']; ?>">
-                                                    <input type="hidden" name="up_status" value="for release...">
-                                                    <button type="submit" name="release" class="btn btn-outline-warning me-2" style="font-size: .8rem">
-                                                        <i class="fa-regular fa-calendar-check"></i> For release
-                                                    </button>
-                                                </form>
-                                            <?php } ?>
-                                            <div class="btn-group dropstart">
-                                                <a type="button" class="btn data-toggle rounded-3 border-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa-solid fa-ellipsis"></i>
-                                                </a>
-                                                <div class="dropdown-menu p-2">
-                                                    <form class="m-0" action="" method="post">
-                                                        <input type="hidden" name="rq_id" value="<?php echo $request['rq_id'];?>">
-                                                        <button type="submit" class="btn btn-danger mb-0 w-100" style="font-size: .8rem" name="remove" href="#">archive</button>
-                                                    </form>
+                                        <td><?php echo $counter; ?></td>
+                                        <td><?= $request['StudentFullName'] ?></td>
+                                        <td><?= (new DateTime($request['Schedule']))->format('F d, Y | h:i a') ?></td>
+                                        <td>
+                                            <div class="fw-bold text-<?= $request['RequestStatus'] === null ? 'secondary' : ($request['RequestStatus'] ? 'warning' : 'primary') ?>">
+                                                <?= $status ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-file"></i> View Documents
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end p-3" style="width: 400px">
+                                                    <div class="row gx-3">
+                                                        <?php foreach($documents as $doc): ?>
+                                                            <div class="col">
+                                                                <div class="bg-white doc_card border rounded shadow-sm">
+                                                                    <div class="docCardIMG">
+                                                                        <img src="../img/ID_cardDefault.jpg" class="card-img-top" alt="<?= $doc['DocumentName'] ?>">
+                                                                    </div>
+                                                                    <div class="px-2 pt-2">
+                                                                        <h6 class=""><?= $doc['DocumentName'] ?></h6>
+                                                                        <p style="font-size: 12px"><?= $doc['DocumentDescription'] ?></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <?php endforeach; ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
+                                        <td class="text-end">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-light btn-sm me-1" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#modal<?= $request['RequestID'] ?>">
+                                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                                </button>
+                                                <form action="PhpHandler/approve.php" method="post" class="m-0">
+                                                    <input type="hidden" name="id" value="<?= $request['RequestID'] ?>">
+                                                    <input type="hidden" name="sched" value="<?= $request['Schedule'] ?>">
+                                                    <input type="hidden" name="up_status" value="<?= $request['RequestStatus'] === null ? 0 : (!$request['RequestStatus'] && '1') ?>">
+                                                    <button type="submit" name="<?= $request['RequestStatus'] ? 'released' : 'prog' ?>" class="btn btn-outline-<?= $btn_class ?> btn-sm me-1" style="font-size: .8rem; width: 90px">
+                                                        <i class="fa-regular fa-calendar-check"></i> <?= $btn_txt ?>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
-                                    <?php include '../db_conn/modal.php' ?>
-                                <?php }?>
+                                    <?php include '../db_conn/modal.php';
+                                    $counter++;
+                                } ?>
                                 </tbody>
                             </table>
                         </div>

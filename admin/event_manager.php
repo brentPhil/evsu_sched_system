@@ -1,8 +1,13 @@
 <?php
 include 'activity_check.php';
-include '../db_conn/operations.php';
-$db = new operations();
-$events_v = $db->event_view();
+include '../db_conn/view.php';
+include '../db_conn/insert.php';
+include '../db_conn/delete.php';
+include '../db_conn/update.php';
+$view = new view();
+$insert = new insert();
+$delete = new delete();
+$events_v = $view->event_view();
 
 $active_year = '';
 $active_month = '';
@@ -10,16 +15,16 @@ $uid = $_SESSION['admin_login'];
 
 if(isset($_POST['del'])){
     $d_id = $_POST['d_id'];
-    $db->del_event_cal($d_id, $uid) ? header("Location: event_manager.php") : header("Location: event_manager.php?error");
+    $delete->del_event_cal($d_id) ? header("Location: event_manager.php") : header("Location: event_manager.php?error");
     exit();
 }
 
 if(isset($_POST['event'])){
-    $db->new_event(3,$uid,$_POST['event_type'],$_POST['event_date'],$_POST['event_length'],$_POST['event_category']) ?
+    $insert->new_event(3,$uid,$_POST['event_type'],$_POST['event_date'],$_POST['event_length'],$_POST['event_category']) ?
         header("Location: event_manager.php") : header("Location: event_manager.php?error");
     exit();
 }
-
+include '../toast.php';
 ?>
 <link href="../calendar/calendar.css" rel="stylesheet" type="text/css">
 <style>

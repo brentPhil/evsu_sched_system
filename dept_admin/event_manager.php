@@ -1,7 +1,7 @@
 <?php
 include 'admin_libraries.php';
-include '../db_conn/operations.php';
-$db = new operations();
+include '../db_conn/view.php';
+$db = new view();
 
 $active_year = '';
 $active_month = '';

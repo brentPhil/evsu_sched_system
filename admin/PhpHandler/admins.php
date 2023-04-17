@@ -1,26 +1,23 @@
 <?php
-include '../../db_conn/operations.php';
-$db = new operations();
-$dept_r=$db->dept_view();
+include '../../db_conn/view.php';
+$view = new view();
+$dept_r=$view->dept_view();
 
 $conn = mysqli_connect("localhost", "root", "", "sched_system");
 
 if (isset($_POST['register'])){
-    if (!isset($_POST['username'], $_POST['password'], $_POST['email'])) {
-        header("Location: admins.php?error=Pls fill up all the fields");
-        exit();
-    }
-    if (isset($_POST['username']) == ''){
-        header("Location: admins.php?error=Enter username");
-        exit();
-    }
-    if (isset($_POST['email']) == ''){
-        header("Location: admins.php?error=Enter email");
-        exit();
-    }
-    if (isset($_POST['password']) == ''){
-        header("Location: admins.php?error=Enter password");
-        exit();
+
+    $required_fields = array(
+        'username' => 'Enter username',
+        'email' => 'Enter email',
+        'password' => 'Enter password'
+    );
+
+    foreach ($required_fields as $field_name => $error_message) {
+        if (empty($_POST[$field_name])) {
+            header("Location: admins.php?error=$error_message");
+            exit();
+        }
     }
 
     if ($stmt = $conn->prepare('SELECT id, password FROM admin WHERE username = ?')) {
