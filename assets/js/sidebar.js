@@ -11,9 +11,9 @@ $(document).ready(function(){
     $('.hmbrgr').click(function() {
         if($('.tlink').is(":visible")){
             $('.tlink').hide();
-            $('.sideNav').removeClass('open');
+            $('.sideNav , .sidebar').removeClass('open');
         } else{
-            $('.sideNav').addClass('open');
+            $('.sideNav , .sidebar').addClass('open');
             $('.tlink').delay(500).fadeIn(500);
         }
     });

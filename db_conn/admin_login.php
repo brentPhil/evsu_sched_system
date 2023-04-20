@@ -1,6 +1,6 @@
 <?php
-include 'config.php';
 session_start();
+include 'config.php';
 
 if ( empty($_POST['username'])) {
     header("Location: ../../admin_login.php?error=Pls enter username");

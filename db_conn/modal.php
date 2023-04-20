@@ -58,16 +58,16 @@
                     </div>
                     <div>
                         <div class="py-2">Requested documents:</div>
-                        <div class="row gx-3 p-2 bg-light">
+                        <div class="row row-cols-3 gx-3">
                             <?php foreach($documents as $doc): ?>
-                                <div class="col">
-                                    <div class="bg-white doc_card border rounded shadow-sm">
+                                <div class="col mb-3">
+                                    <div class="bg-white doc_card border rounded shadow-sm" style="max-width: 180px">
                                         <div class="docCardIMG">
                                             <img src="../img/ID_cardDefault.jpg" class="card-img-top" alt="<?= $doc['DocumentName'] ?>">
                                         </div>
                                         <div class="px-2 pt-2">
-                                            <h6 class=""><?= $doc['DocumentName'] ?></h6>
-                                            <p style="font-size: 12px"><?= $doc['DocumentDescription'] ?></p>
+                                            <div style="font-size: 12px; font-weight: bold" class="text-truncate"><?= $doc['DocumentName'] ?></div>
+                                            <p style="font-size: 8px"><?= $doc['DocumentDescription'] ?></p>
                                         </div>
                                     </div>
                                 </div>

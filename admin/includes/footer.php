@@ -1,26 +1,29 @@
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 <script>
     $(document).ready( function () {
 
-        var table = $('#myTable').DataTable({
-            scrollY: '50vh',
-            scrollCollapse: true,
-            "dom": '"top"i',
-            "bPaginate": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true,
+        const table = $('#myTable').DataTable({
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 2, targets: 0 },
+                { responsivePriority: 3, targets: -3 },
+                { responsivePriority: 1, targets: -1 }
+            ],
+            dom: 'topi',
+            paging: false,
+            info: false
         });
 
-        // Handle department filter change
+        $('#inlineFormInputGroupUsername').on('keyup', function() {
+            table.search(this.value).draw();
+        });
         $('#dept-select').on('change', function () {
             var deptValue = $(this).val();
 
-            // Clear existing search filter
             table.search('').draw();
 
-            // Set new search filter
             if (deptValue !== 'Select Department') {
                 table.column(0).search(deptValue, true, false).draw();
             }
@@ -32,7 +35,7 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-        $('#rq, #rq_prog').DataTable({
+        $('#rq_prog').DataTable({
             "bPaginate": false,
             "bLengthChange": false,
             "bFilter": true,

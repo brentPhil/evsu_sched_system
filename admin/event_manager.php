@@ -1,5 +1,6 @@
 <?php
-include 'activity_check.php';
+require_once 'middleware.php';
+include '../main_libraries.php';
 include '../db_conn/view.php';
 include '../db_conn/insert.php';
 include '../db_conn/delete.php';

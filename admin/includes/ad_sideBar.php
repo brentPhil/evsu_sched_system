@@ -106,7 +106,7 @@
     $(document).ready(function ($){
         var path = window.location.pathname.split("/").pop();
         if (path === ''){
-            path = 'ad_main.php';
+            path = 'dashboard.php';
         }
         var target = $('ul li a[href="'+path+'"]');
         target.addClass('active');

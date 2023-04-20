@@ -56,17 +56,6 @@ if(isset($_SESSION['error'])){
                                 </div>
                                 <input type="hidden" name="studentType" id="studentType">
                             </div>
-                            <div class="col-sm-12 col-md-7 col-lg-12">
-                                <div class="form-group mb-3 graduate-section d-none">
-                                    <label for="course" class="h5">Course of Study</label>
-                                    <select class="form-control" id="course" name="course" disabled>
-                                        <option value="">-- Select Course --</option>
-                                        <?php foreach($courses as $course) { ?>
-                                            <option value="<?php echo $course['name']; ?>"><?php echo $course['name']; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-7 col-lg-12">

@@ -2,7 +2,8 @@
 include '../db_conn/view.php';
 $db = $view = new view();
 $requests = $view->approved_requests();
-include 'activity_check.php';
+require_once 'middleware.php';
+include '../main_libraries.php';
 include '../toast.php';
 ?>
     <div class="d-flex body w-100">

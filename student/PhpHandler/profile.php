@@ -12,7 +12,7 @@ if (isset($_POST['save_pro'])) {
         }
     }
 
-    $result = $insert->pro_save(
+    $result = $insert->save_profile(
         $_SESSION['id'],
         $_POST['course'],
         $_POST['lname'],

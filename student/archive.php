@@ -2,7 +2,7 @@
 $conn = mysqli_connect("localhost", "root", "", "sched_system");
 include '../db_conn/archive.php';
 $archive = new archive();
-
+include_once '../middleware.php';
 include 'linkScript.php';
 $uid = $_SESSION['id'];
 $requests = $archive->st_request_archive($uid);

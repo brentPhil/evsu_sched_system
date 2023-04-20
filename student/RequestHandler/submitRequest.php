@@ -1,26 +1,27 @@
 <?php
 session_start();
+
 require_once '../../db_conn/config.php';
 include '../../db_conn/view.php';
 include '../../db_conn/insert.php';
 
 $insert = new insert();
 $view = new view();
-$student = $view->pro_view($_SESSION['id']);
-$credentials = mysqli_fetch_assoc($student);
+$profile_info = $view->pro_view($_SESSION['Profile_ID']);
+$student_info = mysqli_fetch_assoc($profile_info);
 
 if(isset($_POST['submit']) && !empty($_POST['requestedDocuments'])) {
     $selectedDocuments = $_POST['requestedDocuments'];
     $requestType = $_POST['submissionType'];
     $studentId = $_SESSION['id'];
-    $studentFullName = $credentials['lname'] . ', ' . $credentials['fname'] . ' ' . $credentials['middle'] . '.';
-    $studentEmail = $credentials['email'];
-    $studentAddress = $credentials['address'];
-    $studentGender = $credentials['gender'];
-    $studentPhone = $credentials['phone'];
+    $studentFullName = $student_info['lname'] . ', ' . $student_info['fname'] . ' ' . $student_info['middle'] . '.';
+    $studentEmail = $student_info['email'];
+    $studentAddress = $student_info['address'];
+    $studentGender = $student_info['gender'];
+    $studentPhone = $student_info['phone'];
     $department = $_POST['department'];
     $education = $_POST['studentType'];
-    $course = $education === 'undergraduate' ? $_POST['course'] : '';
+    $course = $student_info['name'];
     $schedule = $_SESSION['date'];
     $authorizedPersonnelId = null;
     $requestStatus = null;

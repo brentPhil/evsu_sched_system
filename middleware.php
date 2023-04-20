@@ -1,5 +1,4 @@
 <?php
 session_start();
-! $_SESSION['id'] && ! $_SESSION["loggedin"] && ! $_SESSION['Profile_ID']
-? header("Location: ../../student_login.php")
-: header("Location: /student/st_main.php");
+!isset($_SESSION['id']) && !isset($_SESSION["loggedin"]) && !isset($_SESSION['Profile_ID'])
+&& header("Location: ../student_login.php");

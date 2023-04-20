@@ -46,21 +46,27 @@ ON r.AuthorizedPersonnelID = a.AuthorizedPersonnelID");
             $stmt3->execute();
             $stmt3->close();
 
-            // Clear requests and associated records from original tables
-            $stmt4 = $this->conn->prepare("DELETE FROM documentmapping WHERE RequestID = ?");
+            // Delete calendar row related to archived request
+            $stmt4 = $this->conn->prepare("DELETE FROM calendar WHERE app_uid = ?");
             $stmt4->bind_param("s", $requestID);
             $stmt4->execute();
             $stmt4->close();
 
-            $stmt5 = $this->conn->prepare("DELETE FROM request WHERE RequestID = ?");
+            // Clear requests and associated records from original tables
+            $stmt5 = $this->conn->prepare("DELETE FROM documentmapping WHERE RequestID = ?");
             $stmt5->bind_param("s", $requestID);
             $stmt5->execute();
             $stmt5->close();
 
+            $stmt6 = $this->conn->prepare("DELETE FROM request WHERE RequestID = ?");
+            $stmt6->bind_param("s", $requestID);
+            $stmt6->execute();
+            $stmt6->close();
+
             // Delete authorized personnel associated with archived requests
-            $stmt4 = $this->conn->prepare("DELETE FROM authorizedpersonnel WHERE AuthorizedPersonnelID IN (SELECT DISTINCT AuthorizedPersonnelID FROM request_archive)");
-            $stmt4->execute();
-            $stmt4->close();
+            $stmt7 = $this->conn->prepare("DELETE FROM authorizedpersonnel WHERE AuthorizedPersonnelID IN (SELECT DISTINCT AuthorizedPersonnelID FROM request_archive)");
+            $stmt7->execute();
+            $stmt7->close();
 
             // Commit transaction
             $this->conn->commit();

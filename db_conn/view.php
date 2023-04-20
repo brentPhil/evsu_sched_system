@@ -70,7 +70,10 @@ WHERE r.StudentID = '$student_id'");
     public function pro_view($id): mysqli_result|bool
     {
         global $view;
-        return mysqli_query($view->conn, "SELECT * FROM st_profile WHERE st_uid = '$id'");
+        $query = "SELECT *
+FROM st_profile
+INNER JOIN courses ON st_profile.course_id = courses.id WHERE st_profile.id = '$id'";
+        return mysqli_query($view->conn, $query);
     }
     public function course_view(): mysqli_result|bool
     {

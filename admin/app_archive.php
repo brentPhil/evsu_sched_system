@@ -2,7 +2,8 @@
 include '../db_conn/archive.php';
 $db = $archive = new archive();
 $archive_request=$archive->request_archive();
-include 'activity_check.php';
+require_once 'middleware.php';
+include '../main_libraries.php';
 include '../toast.php';
 ?>
 

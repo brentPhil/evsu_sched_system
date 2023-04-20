@@ -1,10 +1,10 @@
 <?php
-// We need to use sessions, so you should always start sessions using the below code.
 session_start();
-// If the user is logged in redirect to the dashboard
-if (isset($_SESSION['loggedin'])) {
-    header('Location: student/st_main.php');
-    exit;
+if (isset($_SESSION["loggedin"]) && isset($_SESSION["id"]) && isset($_SESSION["Profile_ID"])) {
+    header("Location: student/st_main.php");
+    exit();
+} else {
+    unset($_SESSION["loggedin"], $_SESSION["id"], $_SESSION["Profile_ID"], $_SESSION["dept_id"], $_SESSION["name"]);
 }
 ?>
 <?php include '_libraries.php'?>
@@ -42,7 +42,7 @@ if (isset($_SESSION['loggedin'])) {
               <i class="fa-solid fa-note-sticky me-1"></i>Note: Your password is your first two(2) letters of your lastname and add your Student ID no.
             </span>
                         </div>
-                        <button class="btn btn-danger bg_primary w-100 py-3" name="login" type="submit">Login</button>
+                        <button class="btn btn-danger bg_primary w-100 py-3" type="submit">Login</button>
                         <div class="text-center pt-3">
                             <p>Click <a href="admin_login.php">here!</a> for admin</p>
                         </div>

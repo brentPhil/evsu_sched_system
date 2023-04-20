@@ -1,11 +1,11 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "sched_system");
 include '../db_conn/view.php';
 $view = new view();
-
 include 'linkScript.php';
+include_once '../middleware.php';
 $uid = $_SESSION['id'];
 $requests = $view->st_request_view($uid);
+
 ?>
     <style>
         tr td, th{
@@ -52,7 +52,7 @@ $requests = $view->st_request_view($uid);
                 <div class="card border-0 shadow-lg" style="height: 75vh;">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-secondary">
-                            Appointment Schedules
+                            Appointment Schedules <?php echo $_SESSION["Profile_ID"]?>
                         </h6>
                     </div>
                     <!-- View Appointments -->
@@ -118,4 +118,5 @@ $requests = $view->st_request_view($uid);
             </div>
         </div>
     </div>
-<?php include 'includes/footer.php'?>
+<?php include 'includes/footer.php';
+?>
