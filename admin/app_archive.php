@@ -1,79 +1,156 @@
 <?php
 include '../db_conn/archive.php';
-$db = $archive = new archive();
-$archive_request=$archive->request_archive();
-require_once 'middleware.php';
-include '../main_libraries.php';
-include '../toast.php';
-?>
+$archive = new archive();
+$requests = $archive->request_archive();
+$result = $archive->archive_count();
 
-<div class="d-flex body w-100">
-    <div id="side_bar" class="sideNav flex-column flex-shrink-1 bg-light text-dark open">
-        <?php include 'includes/ad_sideBar.php' ?>
-    </div>
-    <div class="w-100">
-        <?php include 'includes/navBar.php'?>
-        <div class="container px-5 pt-4">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-                    <li class="breadcrumb-item text-secondary" aria-current="page">Requests</li>
-                </ol>
-            </nav>
-            <div class="card border-1 shadow-lg" style="height: 75vh;">
-                <div class="card-header py-3">
-                    <h6 class="m-1 font-weight-bold text-secondary">
-                        archive Request
-                    </h6>
-                </div>
-                <!-- archive Appointments -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="rq" class="display">
-                            <thead class="text-uppercase">
-                            <tr>
-                                <th>Full Name</th>
-                                <th>Schedule</th>
-                                <th>Status</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            $status_map = [Null => 'pending...',0 => 'in progress',1 => 'for release'];
-                            $btn_map = [Null => 'Approve',0 => 'Done',1 => 'Released'];
-                            foreach ($archive_request as $request) {
-                                $status = $status_map[$request['RequestStatus']] ?? 'pending...';
-                                $btn_txt = $btn_map[$request['RequestStatus']] ?? 'Approve';
-                                $btn_class = !$request['RequestStatus'] ? 'primary' : 'warning';
-                                ?>
-                                <tr>
-                                    <td><?= $request['StudentFullName'] ?></td>
-                                    <td><?= (new DateTime($request['Schedule']))->format('F d, Y | h:i a') ?></td>
-                                    <td>
-                                        <div class="fw-bold text-<?= !$request['RequestStatus'] === null ? 'secondary' : ($request['RequestStatus'] ? 'warning' : 'primary') ?>">
-                                            <?= $status ?>
-                                        </div>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="d-flex justify-content-end">
-                                            <button type="button" class="btn btn-light btn-sm me-1" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#modal<?= $request['RequestID'] ?>">
-                                                <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger" style="font-size: .8rem" data-bs-toggle="modal" data-bs-target="#delete<?php  echo $request['RequestID']; ?>">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php include '../db_conn/modal.php' ?>
-                            <?php } ?>
-                            </tbody>
-                        </table>
+$all_count = 0;
+$claimed = 0;
+$canceled = 0;
+
+
+while ($row = mysqli_fetch_assoc($result)) {
+    switch ($row['RequestStatus']) {
+        case 'completed':
+            $claimed = $row['count'];
+            break;
+        default:
+            $canceled = $row['count'];
+            break;
+    }
+    $all_count += $row['count'];
+}
+
+include '../toast.php';
+require_once 'admin_middleware.php';
+include '../main_libraries.php';
+?>
+    <style>
+        .body{
+            font-family: 'Poppins', sans-serif;
+        }
+        .calendar .days .day_num{
+            height: 3em !important;
+        }
+        .calendar .days .day_num.ignore {
+            display: inline-flex;
+            font-size: 13px;
+            height: 3em !important;
+        }
+        .calendar .days .day_name{
+            height: 3em !important;
+        }
+        .sd{
+            display: none
+        }
+        th, td {
+            padding: 1em !important;
+        }
+
+        .events{
+            font-size: .8em;
+            text-transform: capitalize;
+            background: #eaeaea;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .events:hover{
+            background: #eaeaea !important;
+        }
+        /* Remove border and add padding to tabs */
+        .nav-tabs .nav-link {
+            cursor: pointer;
+            font-weight: 400;
+            border: 0;
+        }
+
+        .badge{
+            font-size: x-small;
+        }
+        /* Add primary color to active tab */
+        .nav-tabs .nav-link.active,
+        .nav-tabs .nav-link.active:focus,
+        .nav-tabs .nav-link.active:hover {
+            color: #ef5454 !important;
+            border-bottom: 2px solid #ef5454;
+        }
+
+        .canceled {
+            width: 120px;
+            color: #ef5454;
+            background-color: #fff1f1;
+        }
+        .claimed {
+            width: 120px;
+            color: #4cc0f6;
+            background-color: #dcf1ff;
+        }
+    </style>
+    <div class="d-flex body">
+        <div class="sideNav shadow-sm position-fixed z-3 flex-column flex-shrink-0 bg-light text-dark open">
+            <?php include 'includes/ad_sideBar.php' ?>
+        </div>
+        <div class="sidebar open"></div>
+        <div class="w-100">
+            <?php include 'includes/navBar.php' ?>
+            <div class="container">
+                <div class="p-lg-5">
+
+                    <div class="card shadow-sm">
+                        <div class="card-header ps-2 bg-white position-relative">
+                            <div class="nav nav-tabs card-header-tabs">
+                                <div class="nav-item p-0">
+                                    <div class="nav-link text-secondary active" data-target="#all">All <span class="badge bg-secondary-subtle rounded-1 align-top text-dark"><?= $all_count ?></span></div>
+                                </div>
+                                <div class="nav-item p-0">
+                                    <div class="nav-link text-secondary" data-target="#claimed">Claimed <span class="badge bg-secondary-subtle rounded-1 align-top text-dark"><?= $claimed ?></span></div>
+                                </div>
+                                <div class="nav-item p-0">
+                                    <div class="nav-link text-secondary" data-target="#canceled">Canceled <span class="badge bg-secondary-subtle rounded-1 align-top text-dark"><?= $canceled ?></span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0">
+
+                            <div class="d-flex justify-content-between p-3 border-bottom border-secondary">
+                                <div></div>
+                                <div>
+                                    <label class="visually-hidden" for="inlineFormInputGroupUsername">Username</label>
+                                    <div class="input-group">
+                                        <div class="input-group-text bg-white border-end-0 text-secondary"><i class="fa-solid fa-magnifying-glass"></i></div>
+                                        <input type="text" class="form-control border-start-0 ps-0" id="inlineFormInputGroupUsername" placeholder="Search request">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="all">
+                                    <?php require_once 'tables/archived_request.php'?>
+                                </div>
+                                <div class="tab-pane fade" id="claimed">
+                                    <?php require_once 'tables/claimed_request.php'?>
+                                </div>
+                                <div class="tab-pane fade" id="canceled">
+                                    <?php require_once 'tables/canceled_request.php'?>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </div>
+
+                <?php
+                foreach ($requests as $request):
+                    $documents = $archive->docArchive_mappings($request['RequestID']); ?>
+                    <?php include '../db_conn/modal.php'; ?>
+                <?php endforeach ?>
+
             </div>
+
         </div>
     </div>
-</div>
 <?php include 'includes/footer.php'?>

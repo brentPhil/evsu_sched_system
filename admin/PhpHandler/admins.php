@@ -20,7 +20,7 @@ if (isset($_POST['register'])){
         }
     }
 
-    if ($stmt = $conn->prepare('SELECT id, password FROM admin WHERE username = ?')) {
+    if ($stmt = $conn->prepare('SELECT id, password FROM admin_request.php WHERE username = ?')) {
         $stmt->bind_param('s', $_POST['username']);
         $stmt->execute();
         $stmt->store_result();
@@ -28,7 +28,7 @@ if (isset($_POST['register'])){
             header("Location: admins.php?error = Username exists, please choose another");
             exit();
         } else {
-            if ($stmt = $conn->prepare('INSERT INTO admin (dept_id, username, password, email) VALUES (?, ?, ?, ?)')) {
+            if ($stmt = $conn->prepare('INSERT INTO admin_request.php (dept_id, username, password, email) VALUES (?, ?, ?, ?)')) {
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $stmt->bind_param('ssss', $_POST['dept'], $_POST['username'], $password, $_POST['email']);
                 $stmt->execute();

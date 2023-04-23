@@ -1,5 +1,11 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
-    .active{
+    .body{
+
+    }
+    .sideLink .active{
         color: #1a1a1a !important;
         border-right: 3px solid #ff3636;
         background: rgb(2,0,36);
@@ -8,7 +14,6 @@
     .doc_card:hover .docCardIMG {
         height: 120px; /* set the desired increased height */
     }
-
     .docCardIMG {
         transition: all 0.3s ease;
         position: relative;
@@ -25,6 +30,7 @@
         object-fit: cover;
     }
 </style>
+<div class="h-100 bg-white">
 <div class="px-3" style="border-radius: 0 0 1em 1em; background: #d54b4b">
     <div style="max-width: 70px; padding: 1.5em 0">
         <div class="d-flex justify-content-center">
@@ -41,21 +47,22 @@
     </div>
 </div>
 
-<div class="mt-4">
+<div class="mt-4 sideLink">
     <ul id="menu" class="m-0 p-0" style="list-style: none">
         <li>
-            <a href="dashboard.php" class="d-flex py-3 links text-decoration-none">
-                <div class="iContainer mx-3">
+            <a href="dashboard.php" class="d-flex p-3 links text-decoration-none">
+                <div class="iContainer">
                     <i class="fa-solid fa-chart-line"></i>
                 </div>
                 <span class="tlink overflow-hidden">Dashboard</span>
             </a>
         </li>
+
         <li>
             <div class="d-flex links text-decoration-none" >
                 <div class="btn-group dropend w-100">
-                    <div class="w-100 py-3 d-flex data-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="iContainer mx-3">
+                    <div class="w-100 p-3 d-flex data-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="iContainer">
                             <i class="fa-regular fa-square-plus"></i>
                         </div>
                         <span class="tlink overflow-hidden w-100">Add</span>
@@ -70,16 +77,8 @@
             </div>
         </li>
         <li>
-            <a href="appointments.php" class="d-flex py-3 links text-decoration-none">
-                <div class="iContainer mx-3">
-                    <i class="fa-regular fa-calendar-days"></i>
-                </div>
-                <span class="tlink overflow-hidden">Requests</span>
-            </a>
-        </li>
-        <li>
-            <a href="event_manager.php" class="d-flex py-3 links text-decoration-none">
-                <div class="iContainer mx-3">
+            <a href="event_manager.php" class="d-flex p-3 links text-decoration-none">
+                <div class="iContainer">
                     <i class="fa-regular fa-calendar-check"></i>
                 </div>
                 <span class="tlink overflow-hidden">Calendar</span>
@@ -87,8 +86,8 @@
         </li>
 
         <li>
-            <a href="app_archive.php" class="d-flex py-3 links text-decoration-none">
-                <div class="iContainer mx-3">
+            <a href="app_archive.php" class="d-flex p-3 links text-decoration-none">
+                <div class="iContainer">
                     <i class="fa-solid fa-archive"></i>
                 </div>
                 <span class="tlink overflow-hidden">Reports</span>
@@ -96,7 +95,7 @@
         </li>
     </ul>
 </div>
-
+</div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="../assets/js/jquery.hmbrgr.js"></script>

@@ -7,19 +7,31 @@
         $('.toast').toast('show');
         <?php endif; ?>
 
-        $('#myTable').DataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true,
+        const table = $('#myTable').DataTable({
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 2, targets: 0 },
+                { responsivePriority: 3, targets: -3 },
+                { responsivePriority: 1, targets: -1 }
+            ],
+            dom: 'topi',
+            paging: false,
+            info: false
         });
 
-        $('#certable').dataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true });
+        $('#inlineFormInputGroupUsername').on('keyup', function() {
+            table.search(this.value).draw();
+        });
+
+        $('#all').addClass('active show');
+
+        // Switch tabs on click
+        $('.nav-link').click(function(){
+            $('.nav-link').removeClass('active');
+            $(this).addClass('active');
+            var tabId = $(this).data('target');
+            $('.tab-pane').removeClass('active show');
+            $(tabId).addClass('active show');
+        });
     });
 </script>

@@ -2,7 +2,7 @@
 include '../db_conn/view.php';
 $view = new view();
 $admins_r=$view->admins();
-require_once 'middleware.php';
+require_once 'admin_middleware.php';
 include '../main_libraries.php';?>
     <div class="d-flex body w-100">
         <div id="side_bar" class="sideNav flex-column flex-shrink-0 bg-light text-dark open">

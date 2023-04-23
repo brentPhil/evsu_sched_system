@@ -1,6 +1,5 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 <script>
     $(document).ready( function () {
 
@@ -19,6 +18,7 @@
         $('#inlineFormInputGroupUsername').on('keyup', function() {
             table.search(this.value).draw();
         });
+
         $('#dept-select').on('change', function () {
             var deptValue = $(this).val();
 
@@ -35,33 +35,22 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-        $('#rq_prog').DataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true,
-        });
-        $('#deptTable').DataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true,
-        });
-        $('#courseTable').DataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true,
-        });
 
-        $('#certable').dataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bInfo": false,
-            "bAutoWidth": true });
+        <?php if(isset($_SESSION['error'])): ?>
+        $('.toast-body').text('<?php echo $_SESSION['error']; ?>');
+        $('.toast').toast('show');
+        <?php endif; ?>
+
+        // Activate the first tab by default
+        $('#all').addClass('active show');
+
+        // Switch tabs on click
+        $('.nav-link').click(function(){
+            $('.nav-link').removeClass('active');
+            $(this).addClass('active');
+            var tabId = $(this).data('target');
+            $('.tab-pane').removeClass('active show');
+            $(tabId).addClass('active show');
+        });
     });
 </script>

@@ -1,6 +1,6 @@
-<div class="d-flex justify-content-end align-content-center" style="padding: .8rem; background: #d54b4b">
+<div class="d-flex justify-content-end align-content-center bg-white" style="padding: .8rem">
     <div class="btn-group me-4">
-        <div class="btn btn-costume py-2 px-3 border-0 dropdown-toggle p-1 fw-bold text-capitalize text-light" style="cursor: pointer; font-size: .8rem" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="btn btn-costume py-2 px-3 border-0 dropdown-toggle p-1 fw-bold text-capitalize text-secondary" style="cursor: pointer; font-size: .8rem" data-bs-toggle="dropdown" aria-expanded="false">
             <?=$_SESSION['name']?>
         </div>
         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2">

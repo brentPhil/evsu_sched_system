@@ -14,11 +14,11 @@
 body{
     font-family: "Segoe UI", sans-serif;
 }
-.links:hover{
+.sideLink .links:hover{
     background-color: #efefef;
     color: #2c2c2c;
 }
-.links {
+.sideLink .links {
     cursor: pointer;
     font-weight: bold;
     transition: ease-in-out 100ms;

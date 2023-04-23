@@ -1,20 +1,43 @@
 <?php
 require_once('dbconfig.php');
 
-class Archive extends dbconfig
+class archive extends dbconfig
 {
     public function st_request_archive($request_id): mysqli_result|bool
     {
-        global $view;
-        return mysqli_query($view->conn, "SELECT * FROM Request_archive r
+        global $archive;
+        return mysqli_query($archive->conn, "SELECT * FROM Request_archive r
 LEFT JOIN authorizedpersonnel_archive a
 ON r.AuthorizedPersonnelID = a.AuthorizedPersonnelID
 WHERE r.StudentID = '$request_id'");
     }
+
+    public function docArchive_mappings($request_id): mysqli_result|bool
+    {
+        global $archive;
+        $query = "SELECT d.DocumentName, d.DocumentDescription 
+        FROM Documents d 
+        JOIN DocumentMapping_archive dm ON d.DocumentID = dm.DocumentID 
+        WHERE dm.RequestID = '$request_id'";
+        return mysqli_query($archive->conn, $query);
+    }
+
+    public function archive_count(): mysqli_result|bool
+    {
+        global $archive;
+        return mysqli_query($archive->conn, "SELECT RequestStatus, COUNT(*) as count FROM request_archive GROUP BY RequestStatus");
+    }
+
+    public function st_archive_count($st_id): mysqli_result|bool
+    {
+        global $archive;
+        return mysqli_query($archive->conn, "SELECT RequestStatus, COUNT(*) as count FROM request_archive WHERE StudentID = '$st_id' GROUP BY RequestStatus");
+    }
+
     public function request_archive(): mysqli_result|bool
     {
-        global $view;
-        return mysqli_query($view->conn, "SELECT * FROM Request_archive r
+        global $archive;
+        return mysqli_query($archive->conn, "SELECT * FROM Request_archive r
 LEFT JOIN authorizedpersonnel_archive a
 ON r.AuthorizedPersonnelID = a.AuthorizedPersonnelID");
     }

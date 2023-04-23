@@ -13,7 +13,6 @@
     .dropdown-item.costume:hover{
         background: #e3e3e3;
     }
-
 </style>
 <div class="d-flex justify-content-end align-content-center bg-white shadow-sm" style="padding: .8rem;">
     <div class="btn-group me-4">

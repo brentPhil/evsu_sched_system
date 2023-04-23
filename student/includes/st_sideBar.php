@@ -1,9 +1,28 @@
 <style>
-    .active{
+    .sideLink .active{
         color: #1a1a1a !important;
         border-right: 3px solid #ff3636;
         background: rgb(2,0,36);
         background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(255,255,255,0) 0%, rgba(255,226,226,0.7987570028011204) 100%);
+    }
+    .doc_card:hover .docCardIMG {
+        height: 120px; /* set the desired increased height */
+    }
+
+    .docCardIMG {
+        transition: all 0.3s ease;
+        position: relative;
+        height: 80px; /* set the desired height of the container */
+        overflow: hidden;
+    }
+
+    .docCardIMG img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
     }
 </style>
 <div class="px-3" style="border-radius: 0 0 1em 1em; background: #d54b4b">
@@ -18,11 +37,11 @@
             <img src="../img/logo.png" class="" style="width: 100%; object-fit: cover" alt="logo">
         </div>
         <div class="tlink fs-4 mt-2 fw-bolder text-light text-center overflow-hidden">REGISTRAR</div>
-        <div class="tlink text-light text-center" style="font-size: .8rem; font-family: 'Poppins', sans-serif">Admin Access</div>
+        <div class="tlink text-light text-center" style="font-size: .8rem; font-family: 'Poppins', sans-serif">Student Portal</div>
     </div>
 </div>
 
-<div class="mt-4">
+<div class="mt-4 sideLink">
     <ul id="menu" class="m-0 p-0" style="list-style: none">
         <li>
             <a href="st_main.php" class="d-flex py-3 links text-decoration-none">

@@ -4,10 +4,10 @@ $insert = new dbconfig();
 
 class insert extends dbconfig
 {
-    public function new_event($ad_id,$uid,$e_type,$e_date,$e_length,$e_category): mysqli_result|bool
+    public function new_event($ad_id,$e_type,$e_date,$e_length,$e_category): mysqli_result|bool
     {
         global $insert;
-        return mysqli_query($insert->conn,"INSERT INTO calendar(app_uid, dept_id, event_type, event_date, event_length, event_category) VALUES ('$ad_id','$uid','$e_type','$e_date','$e_length','$e_category')");
+        return mysqli_query($insert->conn,"INSERT INTO calendar(app_uid, event_type, event_date, event_length, event_category) VALUES ('$ad_id','$e_type','$e_date','$e_length','$e_category')");
     }
     public function newDocuments($name, $description): mysqli_result|bool
     {
@@ -40,6 +40,11 @@ class insert extends dbconfig
             if (!$result) {
                 return false;
             }
+        }
+        if($requestType === 'Walk in'){
+            $stmt = $this->conn->prepare("INSERT INTO calendar(app_uid, event_type, event_date, event_length, event_category) VALUES (?, 'request', ?, '1', '4')");
+            $stmt->bind_param("is", $RequestID, $schedule);
+            return $stmt->execute();
         }
         return true;
     }

@@ -1,5 +1,5 @@
 <?php
-//this is for admin 
+//this is for admin_request.php
 $dbServername = "localhost";
 $dbUsername = "root";
 $dbPassword = "";

@@ -3,8 +3,8 @@ require_once ('db/dbconfig.php');
 
 $connection = mysqli_connect("localhost", "root", "", "student");
 /*  
-buttons for admin
-$adminConn = mysqli_connect("localhost", "root", "", "admin");
+buttons for admin_request.php
+$adminConn = mysqli_connect("localhost", "root", "", "admin_request.php");
 $limit = "SELECT limit FROM users";
 $limiter = mysqli_query($adminConn, $limit);
 */

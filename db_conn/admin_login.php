@@ -25,11 +25,7 @@ if ($stmt = $conn->prepare('SELECT id, dept_id, password FROM admin WHERE userna
             $_SESSION['ad_name'] = $_POST['username'];
             $_SESSION['dept_id'] = $dept_id;
             $_SESSION['id'] = $id;
-            if($dept_id != 0){
-                header("Location: ../dept_admin/dashboard.php?success=Welcome");
-            }else{
-                header("Location: ../admin/dashboard.php?success=Welcome");
-            }
+            header("Location: ../admin/dashboard.php?success=Welcome");
         } else {
             header("Location: ../admin_login.php?error=Incorrect Password");
         }

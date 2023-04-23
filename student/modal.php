@@ -1,7 +1,4 @@
-<?php
-$db = $view = new view();
-$documents=$view->document_mappings($request['RequestID']);
-?>
+
 <div class="modal fade" id="modal<?php  echo $request['RequestID']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -19,10 +16,7 @@ $documents=$view->document_mappings($request['RequestID']);
                     <?php } else {?>
                         <div class="row py-1 border-bottom">
                             <div class="col-4 py-2">Authorized Personnel:</div>
-                            <div class="col-8 py-2 bg-light">
-                                <?php  echo 'Full name: '.$request['AuthorizedPersonnelName']?><br>
-                                <?php  echo 'Address: '.$request['AuthorizedAddress']?>
-                            </div>
+                            <div class="col-8 py-2 bg-light"><?php  echo 'name: '.$request['AuthorizedPersonnelName']?></div>
                         </div>
                     <?php } ?>
                     <div class="row py-1 border-bottom">
@@ -62,9 +56,23 @@ $documents=$view->document_mappings($request['RequestID']);
                         <div class="col-4">Schedule:</div>
                         <div class="col-8 py-2 bg-light"><?php  echo date('F d, Y | h: i a', strtotime($request['Schedule'])); ?></div>
                     </div>
-                    <div class="row py-1 ">
-                        <div class="col-4 py-2">Requested documents:</div>
-                        <div class="col-8 py-2 bg-light"><ul><?php foreach($documents as $document){?><?php  echo '<li>'.$document['DocumentName'].'</li>'; } ?></ul></div>
+                    <div>
+                        <div class="py-2">Requested documents:</div>
+                        <div class="row row-cols-3 gx-3">
+                            <?php foreach($documents as $doc): ?>
+                                <div class="col mb-3">
+                                    <div class="bg-white doc_card border rounded shadow-sm" style="max-width: 180px">
+                                        <div class="docCardIMG">
+                                            <img src="../img/ID_cardDefault.jpg" class="card-img-top" alt="<?= $doc['DocumentName'] ?>">
+                                        </div>
+                                        <div class="px-2 pt-2">
+                                            <div style="font-size: 12px; font-weight: bold" class="text-truncate"><?= $doc['DocumentName'] ?></div>
+                                            <p style="font-size: 8px"><?= $doc['DocumentDescription'] ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -85,7 +85,7 @@
     justify-content: center;
 }
 .calendar .days .day_num.selected {
-    background-color: #ffe2e2;
+    background-color: #e7e7e7;
     cursor: inherit;
 }
 

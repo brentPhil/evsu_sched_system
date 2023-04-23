@@ -37,6 +37,11 @@ if(isset($_SESSION['error'])){
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <div class="container d-flex justify-content-center">
     <div class="p-5 col-sm-12 col-md-12 col-lg-12">
+
+        <a href="../select_sched.php" class="btn btn-danger border-0 text-light mb-3 bg_primary" style="font-size: .8rem;">
+        <i class="fa fa-arrow-alt-circle-left me-2"></i>Back to Portal
+        </a>
+
         <div class="card formCard mx-auto">
             <div class="card-header">
                 <div class="text-lg-start text-md-center">

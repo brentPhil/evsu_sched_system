@@ -3,18 +3,19 @@ include '../db_conn/view.php';
 $view = new view();
 $departments=$view->dept_view();
 $courses=$view->course_view();
-require_once 'middleware.php';
+require_once 'admin_middleware.php';
 include '../main_libraries.php';?>
-    <div class="d-flex body w-100">
-        <div id="side_bar" class="sideNav flex-column flex-shrink-0 bg-light text-dark open">
+    <div class="d-flex body">
+        <div class="sideNav position-fixed z-3 flex-column flex-shrink-0 bg-light text-dark open">
             <?php include 'includes/ad_sideBar.php' ?>
         </div>
+        <div class="sidebar open"></div>
         <div class="w-100">
-            <?php include 'includes/navBar.php'?>
-            <div class="container px-5 pt-5">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="card border-0 shadow-lg mb-4" style="height: 79vh;">
+            <?php include 'includes/navBar.php' ?>
+            <div class="container-fluid">
+                <div class="row p-lg-5 p-3">
+                    <div class="col-12 col-lg-6 mb-md-3">
+                        <div class="card border-0 shadow-lg">
                             <div class="card-header d-flex justify-content-between align-items-center py-3">
                                 <h6 class="m-0 font-weight-bold text-secondary">
                                     Department
@@ -26,8 +27,8 @@ include '../main_libraries.php';?>
                             </div>
                             <!-- View Appointments -->
                             <div class="card-body h-100">
-                                <div class="table-responsive">
-                                    <table id="deptTable" class="display">
+                                <div class="table-responsive overflow-y-auto" style="max-height: 60vh">
+                                    <table id="depTable" class="display">
                                         <thead>
                                         <tr>
                                             <th>Title</th>
@@ -73,8 +74,17 @@ include '../main_libraries.php';?>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="card border-0 shadow-lg mb-4" style="height: 79vh;">
+                    <script>
+                        $(document).ready( function () {
+                            $('#depTable').DataTable({
+                                dom: 'topi',
+                                paging: false,
+                                info: false
+                            });
+                        });
+                    </script>
+                    <div class="col-12 col-lg-6">
+                        <div class="card border-0 shadow-lg">
                             <div class="card-header d-flex justify-content-between align-items-center py-3">
                                 <h6 class="m-0 font-weight-bold text-secondary">
                                     Courses
@@ -85,8 +95,8 @@ include '../main_libraries.php';?>
                             </div>
                             <!-- View Appointments -->
                             <div class="card-body h-100">
-                                <div class="table-responsive">
-                                    <table id="courseTable" class="display">
+                                <div class="table-responsive overflow-y-auto" style="max-height: 60vh">
+                                    <table id="myTable" class="display">
                                         <thead>
                                         <tr>
                                             <th>Title</th>

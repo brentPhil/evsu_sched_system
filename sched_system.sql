@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Table structure for table `admin_request.php`
 --
 
 CREATE TABLE `admin` (
@@ -36,11 +36,11 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admin`
+-- Dumping data for table `admin_request.php`
 --
 
 INSERT INTO `admin` (`id`, `dept_id`, `username`, `email`, `password`) VALUES
-(3, 0, 'adminxx', 'admin.edu.evsu.com', '$2y$10$bFJUZ2ZjpRTrf8dAr6A2Uu4pI0WAA6W20PaIzHHoU9GrxtfdPUgiO'),
+(3, 0, 'adminxx', 'admin_request.php.edu.evsu.com', '$2y$10$bFJUZ2ZjpRTrf8dAr6A2Uu4pI0WAA6W20PaIzHHoU9GrxtfdPUgiO'),
 (4, 1, 'Engineering', 'adminEngi@edu.evsu.com', '$2y$10$S4F9I2EN9ukrfTf0KBC5KO5dq5RA.X.rHqmZZ4KE.15u2iDeZsil2'),
 (5, 2, 'Technology', 'admin_tech@edu_evsu.com', '$2y$10$M/ZaczpR9IoZHxUD9mA4Iu9JKECtuflRkEs5MjtolvgmWvUZ8S4IW');
 

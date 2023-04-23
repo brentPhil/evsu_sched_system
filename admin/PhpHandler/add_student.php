@@ -23,7 +23,7 @@ if (isset($_POST['register'])){
         exit();
     }
 
-    if ($stmt = $conn->prepare('SELECT id, password FROM admin WHERE username = ?')) {
+    if ($stmt = $conn->prepare('SELECT id, password FROM admin_request.php WHERE username = ?')) {
         $stmt->bind_param('s', $_POST['student_id']);
         $stmt->execute();
         $stmt->store_result();
